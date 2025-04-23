@@ -1,0 +1,24 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "oringe_color",
+      "value": "#eca94e"
+    },
+    {
+      "name": "Grow_color",
+      "value":"#ffb8b8b8"
+    },
+    {
+      "name": "light_white",
+      "value": "#FAF1E5"
+    },
+    {
+      "name": "brouwn",
+      "value": "#483935"
+    }
+  ]
+}
