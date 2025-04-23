@@ -7,7 +7,7 @@ import {Nonepage} from '../view/NonePage'
 import {carInformationItem} from  '../view/carInformation'
 import {AutoSet} from '../view/AutoSet'
 import {HuaweiMapDemo} from '../view/map'
-
+import {Setting_Page} from '../pages/Setting_page'
 
 @Entry
 @Component
@@ -204,7 +204,11 @@ struct Index {
 
       TabContent() {
 
+        Setting_Page()
+
+
       }
+      .backgroundColor('#e2eeeeee')
       .tabBar(this.tabBarBuilder("设置", 2, $rawfile('up_control.png'), $rawfile('un_control.png')))
     }
     .onChange((index: number) => {

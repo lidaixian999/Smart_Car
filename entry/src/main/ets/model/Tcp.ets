@@ -7,6 +7,24 @@ class SocketInfo {
 }
 
 class TCPSocketServerSingleton {
+
+    //
+    //  bindAddr: socket.NetAddress = {
+    //   address:  "192.168.18.1",
+    //   port: 4120
+    // };// 测试地址
+
+
+  bindAddr: socket.NetAddress = {
+      address:  "192.168.137.155",
+      port: 5678
+    };
+
+
+      tcp_connect_options: socket.TCPConnectOptions = {
+      address: this.bindAddr,
+      timeout: 2000
+    };
   private static instance: TCPSocketServerSingleton;
   private tcp: socket.TCPSocket;
   private tcp_send_Options: socket.TCPSendOptions = {
@@ -48,23 +66,15 @@ class TCPSocketServerSingleton {
   }
 
   private connect() {
-    let bindAddr: socket.NetAddress = {
-      address:  "192.168.18.1",
-      port: 4120
-    }; // 测试地址
-
-    let tcp_connect_options: socket.TCPConnectOptions = {
-      address: bindAddr,
-      timeout: 6000
-    };
-
-    this.tcp.connect(tcp_connect_options).catch((error:BusinessError) => {
+    this.tcp.connect(this.tcp_connect_options).catch((error:BusinessError) => {
       console.error('Connection error:', error);
     });
   }
 
   Send_data(message: string) {
     this.tcp_send_Options.data = message;
+    this.tcp.connect(this.tcp_connect_options)
+    console.log("Send "+ message)
     this.tcp.send(this.tcp_send_Options).catch((error:BusinessError) => {
       console.error('Error sending data:', error);
     });

@@ -4,97 +4,19 @@ import GlobalData from '../model/Tcp_data'
 import { socket } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 
-// class SocketInfo {
-//   message: ArrayBuffer = new ArrayBuffer(1);
-//   remoteInfo: socket.SocketRemoteInfo = {} as socket.SocketRemoteInfo;
-// }
-// // 创建一个TCPSocket连接，返回一个TCPSocket对象。
-// let tcp: socket.TCPSocket = socket.constructTCPSocketInstance();
-// let tcp_send_Options: socket.TCPSendOptions = {
-//   data: 'Hello, server!'
-// }
-//
-// tcp.on('message', (value: SocketInfo) => {
-//   console.log("on message");
-//   let buffer = value.message;
-//   let dataView = new DataView(buffer);
-//   let str = "";
-//   for (let i = 0; i < dataView.byteLength; ++i) {
-//     str += String.fromCharCode(dataView.getUint8(i));
-//   }
-//   console.log("on connect received:" + str);
-// });
-//
-// tcp.on('connect', () => {
-//   console.log("on connect");
-// });
-// tcp.on('close', () => {
-//   console.log("on close");
-// });
-//
-//   // 连接到指定的IP地址和端口。
-// // let bindAddr: socket.NetAddress = {
-// //     address:  "192.168.137.81", //"127.0.0.1" ,//"192.168.137.13",
-// //     port:5678//4120
-// //   }
-// let bindAddr: socket.NetAddress = {
-//   address:  "192.168.18.1", //"127.0.0.1" ,//"192.168.137.13",
-//   port:4120
-// }//测试地址
-//
-// let tcp_connect_options: socket.TCPConnectOptions = {
-//   address: bindAddr,
-//   timeout: 6000
-// }
-//
-//   tcp.bind(bindAddr, (err: BusinessError) => {
-//     if (err) {
-//       console.log('bind fail');
-//       return;
-//     }
-//     console.log('bind success');
-//   });
-//
-//   tcp.connect(tcp_connect_options)
-//   .then(() => {
-//     console.log('connect success');
-//   })
-//   .catch((err: BusinessError) => {
-//   console.log('connect fail');
-// });
-
-
 @Component
   export struct LightControl {
   private tcpSingleton = TCPSocketServerSingleton.getInstance();
   private tcp_data = GlobalData.getInstance()
     progress: number = 100; // 进度值，范围 0 - 100
-    @State ambientLightOn: boolean = true; // 氛围灯状态
-    @State autoHeadlightOn: boolean = true; // 自动大灯状态
-    @State selectedColor: string = 'white'; // 新增颜色选择状态
+  @LocalStorageLink ("ambientLightOn") ambientLightOn: boolean = false; // 氛围灯状态
+  @LocalStorageLink ("Select_Color") selectedColor: string = 'white'; // 新增颜色选择状态
     @Consume('pageInfos') pageInfos: NavPathStack;
 
   aboutToAppear(): void {
 
   }
-  //  async  send(command: string){
-  //    tcp_send_Options = { data: command };
-  //    tcp.connect(tcp_connect_options)
-  //      .then(() => {
-  //        console.log('connect success');
-  //      })
-  //      .catch((err: BusinessError) => {
-  //        console.log('connect fail');
-  //      });
-  //
-  //     tcp.send(tcp_send_Options, (err: BusinessError) => {
-  //       if (err) {
-  //         console.log('send fail')
-  //         return;
-  //       }
-  //       console.log('send success');
-  //     })
-  // }
+
   @Builder
   buildTitle(title: string){
     Text(title)
@@ -113,6 +35,25 @@ import { BusinessError } from '@kit.BasicServicesKit';
       .fontColor(this.selectedColor === color ? '#000000' : '#999999')
       .onClick(() => {
         this.selectedColor = color;
+        //todo
+        //todo
+        switch (this.selectedColor) {
+          case'multi':
+            this.tcp_data.modifyDigit(2, "4");
+            break;
+          case'red':
+            this.tcp_data.modifyDigit(2, "1");
+            break;
+          case 'green':
+            this.tcp_data.modifyDigit(2, "3");
+            break;
+          case 'blue':
+            this.tcp_data.modifyDigit(2, "2");
+            break;
+          default:
+            console.log('未知颜色选择');
+        }
+
         this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
       })
   }
@@ -128,7 +69,6 @@ import { BusinessError } from '@kit.BasicServicesKit';
 
       // 开关按钮组（优化版）
       Flex({ justifyContent: FlexAlign.SpaceEvenly }) {
-
         Button('开')
           .width(80)
           .height(40)
@@ -188,6 +128,8 @@ import { BusinessError } from '@kit.BasicServicesKit';
               .fontColor(this.ambientLightOn ? '#000000' : '#999999')
               .onClick(() => {
                 this.ambientLightOn = true;
+                this.selectedColor ='multi'
+                this.tcp_data.modifyDigit(2,"4")
                 this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
                 // this.send('ambient_on');
               })
@@ -199,6 +141,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
               .fontColor(!this.ambientLightOn ? '#000000' : '#999999')
               .onClick(() => {
                 this.ambientLightOn = false;
+                this.tcp_data.modifyDigit(2,"0")
                 this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
                 // this.send('ambient_off');
               })
@@ -209,7 +152,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
         .backgroundColor('#FAFAFA')
         .borderRadius(12)
         .margin({ bottom: 20 })
-
+      if(this.ambientLightOn){
         // 灯光模式控制区
         Column() {
           Text('灯光模式')
@@ -230,6 +173,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
             }
             GridItem() {
               this.buildColorButton('蓝', 'blue')
+
             }
           }
           .columnsTemplate('1fr 1fr')
@@ -243,6 +187,9 @@ import { BusinessError } from '@kit.BasicServicesKit';
         .backgroundColor('#FAFAFA')
         .borderRadius(12)
       }
+
+      }
+
       .width('100%')
       .alignItems(HorizontalAlign.Center)
     }

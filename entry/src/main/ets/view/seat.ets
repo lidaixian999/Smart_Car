@@ -1,9 +1,18 @@
-//已停用
+import TCPSocketServerSingleton from '../model/Tcp';
+import GlobalData from '../model/Tcp_data'
 @Component
 export struct LightItem {
+
+  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private tcp_data = GlobalData.getInstance();
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
-  @State selectedColor: string = 'white'; // 新增颜色选择状态
+  @LocalStorageLink ("ambientSeatOn") ambientSeatOn: boolean = false;
+  @LocalStorageLink ("Select_Seat") Select_seat:string = 'close'
+  @LocalStorageLink ("Select_Mod") selected_Mod: string = '1'; // 新增颜色选择状态
+
+
+
   @Builder
   buildTitle(title: string){
     Text(title)
@@ -13,15 +22,30 @@ export struct LightItem {
       .width('100%')
       .textAlign(TextAlign.Center)
   }
+
   @Builder
-  buildColorButton(label: string, color: string) {
+  buildColorButton(label: string, Mod: string) {
     Button(label)
       .width('80%')
       .height(60)
-      .backgroundColor(this.selectedColor === color ? '#eca94e' : '#F5F5F5')
-      .fontColor(this.selectedColor === color ? '#000000' : '#999999')
+      .backgroundColor(this.selected_Mod === Mod ? '#eca94e' : '#F5F5F5')
+      .fontColor(this.selected_Mod === Mod ? '#000000' : '#999999')
       .onClick(() => {
-        this.selectedColor = color;
+        switch (Mod) {
+          case '1':
+            this.tcp_data.modifyDigit(3, '0');
+            break;
+          case '2':
+            this.tcp_data.modifyDigit(3, '3');
+            break;
+          case '3':
+            this.tcp_data.modifyDigit(3, '2');
+            break;
+          default:
+            console.log('未知模式选择');
+        }
+        this.selected_Mod = Mod;
+        this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
         // this.send(`color_${color}`);
       })
   }
@@ -54,13 +78,13 @@ export struct LightItem {
 
         Grid() {
           GridItem() {
-            this.buildColorButton('正常模式', 'multi')
+            this.buildColorButton('正常模式', '1')
           }
           GridItem() {
-            this.buildColorButton('小憩模式', 'red')
+            this.buildColorButton('小憩模式', '2')
           }
           GridItem() {
-            this.buildColorButton('躺平模式', 'green')
+            this.buildColorButton('躺平模式', '3')
           }
         }
         .columnsTemplate('1fr 1fr')
@@ -75,7 +99,49 @@ export struct LightItem {
       .borderRadius(12)
 
       //座椅通风及温度设置
+      ColumnSplit()
+        .width("80%")
+        .margin({top:10,bottom:10})
 
+
+      Column() {
+        Text('座椅通风')
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .margin({ bottom: 15 })
+          .width('100%')
+
+        Flex({ justifyContent: FlexAlign.SpaceAround }) {
+          Button('是')
+            .width(100)
+            .height(40)
+            .backgroundColor(this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
+            .fontColor(this.ambientSeatOn ? '#000000' : '#999999')
+            .onClick(() => {
+              this.ambientSeatOn = true;
+              this.tcp_data.modifyDigit(1,"2")
+              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              // this.send('ambient_on');
+            })
+
+          Button('否')
+            .width(100)
+            .height(40)
+            .backgroundColor(!this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
+            .fontColor(!this.ambientSeatOn ? '#000000' : '#999999')
+            .onClick(() => {
+              this.ambientSeatOn = false;
+              this.tcp_data.modifyDigit(1,"1")
+              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              // this.send('ambient_off');
+            })
+        }
+      }
+      .width('90%')
+      .padding(15)
+      .backgroundColor('#FAFAFA')
+      .borderRadius(12)
+      .margin({ bottom: 20 })
 
     }
     .title(this.buildTitle('座椅调节'))

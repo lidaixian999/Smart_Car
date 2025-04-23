@@ -7,61 +7,6 @@ import { it } from '@ohos/hypium';
 import { socket } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import {Auto_item} from '../viewmodel/Auto_item'
-//
-// class SocketInfo {
-//   message: ArrayBuffer = new ArrayBuffer(1);
-//   remoteInfo: socket.SocketRemoteInfo = {} as socket.SocketRemoteInfo;
-// }
-//
-//
-// let tcp: socket.TCPSocket = socket.constructTCPSocketInstance();
-// let tcp_send_Options: socket.TCPSendOptions = {
-//   data: 'Hello, server!'
-// }
-//
-// tcp.on('message', (value: SocketInfo) => {
-//   console.log("on message");
-//   let buffer = value.message;
-//   let dataView = new DataView(buffer);
-//   let str = "";
-//   for (let i = 0; i < dataView.byteLength; ++i) {
-//     str += String.fromCharCode(dataView.getUint8(i));
-//   }
-//   console.log("on connect received:" + str);
-// });
-//
-// tcp.on('connect', () => {
-//   console.log("on connect");
-// });
-// tcp.on('close', () => {
-//   console.log("on close");
-// });
-//
-// // 连接到指定的IP地址和端口。
-// let bindAddr: socket.NetAddress = {
-//   address:  "192.168.137.27", //"127.0.0.1" ,//"192.168.137.13",
-//   port:5678//4120
-// }
-// let tcp_connect_options: socket.TCPConnectOptions = {
-//   address: bindAddr,
-//   timeout: 6000
-// }
-//
-// tcp.bind(bindAddr, (err: BusinessError) => {
-//   if (err) {
-//     console.log('bind fail');
-//     return;
-//   }
-//   console.log('bind success');
-// });
-//
-// tcp.connect(tcp_connect_options)
-//   .then(() => {
-//     console.log('connect success');
-//   })
-//   .catch((err: BusinessError) => {
-//     console.log('connect fail');
-//   });
 
 @Preview
 @Component
@@ -129,15 +74,6 @@ struct Auto_list_items{
     this.BOnSt ={'message':  this.Auto.name+'开启.'}
     this.BOffSt = {'message':  this.Auto.name+'关闭.'}
   }
-//   async  send(command: string){
-//   tcp_send_Options = { data: command };
-//   try {
-//     await tcp.connect(tcp_connect_options);
-//     tcp.send(tcp_send_Options);
-//   } catch (err) {
-//     console.error('控制命令发送失败:', err);
-//   }
-// }
   build(){
      Row(){
        Text( this.Auto.name)
@@ -157,11 +93,20 @@ struct Auto_list_items{
            this.Auto.status = isOn;
            if(isOn) {
              promptAction.showToast(this.BOnSt)
-             this.tcp_data.modifyDigit(0,"0")
+             if(this.Auto.name == "自动车前大灯"){
+               this.tcp_data.modifyDigit(0,"0")
+             }else if(this.Auto.name == "自动座椅通风"){
+               this.tcp_data.modifyDigit(1,"0")
+             }
+
              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
            } else {
              promptAction.showToast(this.BOffSt)
-             this.tcp_data.modifyDigit(0,"1")
+             if(this.Auto.name == "自动车前大灯"){
+               this.tcp_data.modifyDigit(0,"1")
+             }else if(this.Auto.name == "自动座椅通风"){
+               this.tcp_data.modifyDigit(1,"2")
+             }
              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
            }
          })
