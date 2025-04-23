@@ -35,8 +35,6 @@ import { BusinessError } from '@kit.BasicServicesKit';
       .fontColor(this.selectedColor === color ? '#000000' : '#999999')
       .onClick(() => {
         this.selectedColor = color;
-        //todo
-        //todo
         switch (this.selectedColor) {
           case'multi':
             this.tcp_data.modifyDigit(2, "4");
