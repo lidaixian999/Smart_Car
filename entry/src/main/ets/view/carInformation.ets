@@ -6,7 +6,8 @@ export struct carInformationItem {
   @Consume('pageInfos') pageInfos: NavPathStack;
   @State batteryLevel: number = 100; //电池电量
   @State mileage: number = 500;      //里程数
-  @State fanStatus: boolean = true;   //风扇状态
+  @StorageLink('fanStatus') fanStatus: boolean = true;   //风扇状态
+  @StorageLink('fenStatus') fenStatus: boolean = false;
   @State carinTemp: number = 24;      //车内温度
   @State humidity: string = '30';    //湿度
   @State editMode: boolean = false;
@@ -156,7 +157,7 @@ export struct carInformationItem {
             .objectFit(ImageFit.Cover)
             .margin({ left: 12, right: 12 }) // 调整左右边距
 
-          Text("风扇状态:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
+          Text("自动风扇:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
             .fontSize(24) // 较小的字体尺寸
             .fontWeight('bold')
             .textAlign(TextAlign.Center)
@@ -176,7 +177,7 @@ export struct carInformationItem {
             .objectFit(ImageFit.Cover)
             .margin({ left: 12, right: 12 }) // 调整左右边距
 
-          Text("氛围灯:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
+          Text("氛围灯:   " + `${this.fenStatus===true?'开':'关'}` + "      ")
             .fontSize(24) // 较小的字体尺寸
             .fontWeight('bold')
             .textAlign(TextAlign.Center)

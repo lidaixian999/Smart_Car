@@ -1,0 +1,8 @@
+{
+  "software-image":
+  {
+    "background" : "$media:backIcon",
+    "foreground" : "$media:backIcon"
+  }
+}
+

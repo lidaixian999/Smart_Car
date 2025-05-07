@@ -1,15 +1,15 @@
 import TCPSocketServerSingleton from '../model/Tcp';
 import GlobalData from '../model/Tcp_data'
 @Component
-export struct LightItem {
+export struct SeatItem {
 
   private tcpSingleton = TCPSocketServerSingleton.getInstance();
   private tcp_data = GlobalData.getInstance();
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
-  @LocalStorageLink ("ambientSeatOn") ambientSeatOn: boolean = false;
-  @LocalStorageLink ("Select_Seat") Select_seat:string = 'close'
-  @LocalStorageLink ("Select_Mod") selected_Mod: string = '1'; // 新增颜色选择状态
+  @StorageLink ("ambientSeatOn") ambientSeatOn: boolean = false;
+  @StorageLink ("Select_Seat") Select_seat:string = 'close'
+  @StorageLink ("Select_Mod") selected_Mod: string = '1'; // 新增颜色选择状态
 
 
 
@@ -105,7 +105,7 @@ export struct LightItem {
 
 
       Column() {
-        Text('座椅通风')
+        Text('手动打开座椅通风')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .margin({ bottom: 15 })
@@ -121,6 +121,7 @@ export struct LightItem {
               this.ambientSeatOn = true;
               this.tcp_data.modifyDigit(1,"2")
               this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              // AppStorage.setOrCreate('fanStatus',true)
               // this.send('ambient_on');
             })
 
@@ -133,6 +134,7 @@ export struct LightItem {
               this.ambientSeatOn = false;
               this.tcp_data.modifyDigit(1,"1")
               this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              // AppStorage.setOrCreate('fanStatus',false)
               // this.send('ambient_off');
             })
         }

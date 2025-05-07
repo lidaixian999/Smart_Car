@@ -16,7 +16,7 @@ class TCPSocketServerSingleton {
 
 
   bindAddr: socket.NetAddress = {
-      address:  "192.168.137.155",
+      address:  "192.168.137.22",
       port: 5678
     };
 

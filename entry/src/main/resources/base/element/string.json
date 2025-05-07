@@ -10,11 +10,15 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "指尖智舱"
     },
     {
       "name": "Auto_Car_light_open",
       "value": "0000"
+    },
+    {
+      "name": "softname",
+      "value": "指尖智舱"
     }
   ]
 }

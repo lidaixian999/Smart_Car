@@ -9,9 +9,9 @@ import { BusinessError } from '@kit.BasicServicesKit';
   private tcpSingleton = TCPSocketServerSingleton.getInstance();
   private tcp_data = GlobalData.getInstance()
     progress: number = 100; // 进度值，范围 0 - 100
-  @LocalStorageLink ("ambientLightOn") ambientLightOn: boolean = false; // 氛围灯状态
-  @LocalStorageLink ("Select_Color") selectedColor: string = 'white'; // 新增颜色选择状态
-    @Consume('pageInfos') pageInfos: NavPathStack;
+  @StorageLink('ambientLightOn') ambientLightOn: boolean = false;
+  @StorageLink('selectedColor') selectedColor: string = 'white';
+  @Consume('pageInfos') pageInfos: NavPathStack;
 
   aboutToAppear(): void {
 
@@ -128,6 +128,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
                 this.ambientLightOn = true;
                 this.selectedColor ='multi'
                 this.tcp_data.modifyDigit(2,"4")
+                AppStorage.setOrCreate('fenStatus',true)
                 this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
                 // this.send('ambient_on');
               })
@@ -140,6 +141,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
               .onClick(() => {
                 this.ambientLightOn = false;
                 this.tcp_data.modifyDigit(2,"0")
+                AppStorage.setOrCreate('fenStatus',false)
                 this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
                 // this.send('ambient_off');
               })
@@ -161,7 +163,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
 
           Grid() {
             GridItem() {
-              this.buildColorButton('三色灯', 'multi')
+              this.buildColorButton('七彩灯', 'multi')
             }
             GridItem() {
               this.buildColorButton('红', 'red')

@@ -6,7 +6,7 @@ import { promptAction } from '@kit.ArkUI';
 import { it } from '@ohos/hypium';
 import { socket } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-import {Auto_item} from '../viewmodel/Auto_item'
+import {Auto_item1} from '../viewmodel/Auto_item'
 
 @Preview
 @Component
@@ -17,7 +17,7 @@ export struct AutoSet {
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
 
-  @LocalStorageLink ("Auto_items")  autoItems: Auto_item[] = [
+  @StorageLink ("Auto_items")  autoItems: Auto_item1[] = [
   { name: "自动车前大灯", status: true },
   { name: "自动座椅通风", status: true },
   { name: "自动雨刷控制", status: true }
@@ -51,7 +51,7 @@ export struct AutoSet {
 
       Flex({justifyContent:FlexAlign.Start,direction:FlexDirection.Column}){
         List({space:20}){
-        ForEach(this.autoItems,(item:Auto_item)=>{
+        ForEach(this.autoItems,(item:Auto_item1)=>{
           Auto_list_items({ Auto:item })
         })
         }
@@ -67,7 +67,7 @@ export struct AutoSet {
 struct Auto_list_items{
   private tcpSingleton = TCPSocketServerSingleton.getInstance();
   private tcp_data = GlobalData.getInstance()
-  @State Auto : Auto_item = {name:'',status:false}
+  @State Auto : Auto_item1 = {name:'',status:false}
   @State BOnSt:promptAction.ShowToastOptions = {'message': this.Auto.name+'开启.'}
   @State BOffSt:promptAction.ShowToastOptions = {'message':  this.Auto.name+'关闭.'}
   aboutToAppear(): void {
@@ -97,15 +97,21 @@ struct Auto_list_items{
                this.tcp_data.modifyDigit(0,"0")
              }else if(this.Auto.name == "自动座椅通风"){
                this.tcp_data.modifyDigit(1,"0")
+               AppStorage.setOrCreate('ambientSeatOn', true);
+               AppStorage.setOrCreate('fanStatus',true)
              }
 
              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
            } else {
              promptAction.showToast(this.BOffSt)
              if(this.Auto.name == "自动车前大灯"){
+
                this.tcp_data.modifyDigit(0,"1")
              }else if(this.Auto.name == "自动座椅通风"){
-               this.tcp_data.modifyDigit(1,"2")
+
+               this.tcp_data.modifyDigit(1,"1")
+               AppStorage.setOrCreate('ambientSeatOn', false);
+               AppStorage.setOrCreate('fanStatus',false)
              }
              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
            }

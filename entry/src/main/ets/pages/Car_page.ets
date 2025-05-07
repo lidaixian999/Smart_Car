@@ -9,8 +9,10 @@ export  struct car_page_item{
             .height('95%')
             .width("auto")
 
-          Text("当前时间")
-            .fontSize(24)
+
+          TextClock()
+            .format("yyyy年M月d日")
+            .fontSize(30)
           TextClock()
             .fontSize(32)
             .format("aa hh:mm:ss")

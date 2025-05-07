@@ -1,19 +1,18 @@
 import router from '@system.router';
-import {TemperatureItem} from '../view/temperature'
 import {car_page_item} from '../pages/Car_page'
-import {LightItem} from '../view/seat'
+import {SeatItem} from '../view/seat'
 import {LightControl} from '../view/light_control'
 import {Nonepage} from '../view/NonePage'
 import {carInformationItem} from  '../view/carInformation'
 import {AutoSet} from '../view/AutoSet'
 import {HuaweiMapDemo} from '../view/map'
 import {Setting_Page} from '../pages/Setting_page'
+import {WeatherPage} from '../view/Weather_Page'
 
 @Entry
 @Component
 struct Index {
   @Provide('pageInfos') pageInfos: NavPathStack = new NavPathStack()
-  private arr: number[] = [1, 2, 3];
 @State Navi_list_items:string[] = ["车辆信息",]
   @Builder
   PageMap(name: string) {
@@ -23,11 +22,13 @@ struct Index {
     } else if (name === "NavDestinationTitle2") {
       LightControl()
     } else if (name === "NavDestinationTitle3") {
-      LightItem({progress:100})
+      SeatItem({progress:100})
     }else if (name === "NavDestinationTitle4") {
       AutoSet()
+    }else if (name === "NavDestinationTitle5"){
+      WeatherPage();
     }else if (name === "NoneTitle"){
-      Nonepage()
+      Nonepage();
     }
   }
 
@@ -151,6 +152,28 @@ struct Index {
                   }
                 })
 
+                ListItem() {
+                  Text("当前天气")
+                    .width("100%")
+                    .height(72)
+                    .backgroundColor(this.selectedButton === 'weather' ? '#eca94e' : '#FAF1E5')
+                    .borderRadius(24)
+                    .fontSize(16)
+                    .fontWeight(FontWeight.Bold)
+                    .textAlign(TextAlign.Center)
+                }.onClick(() => {
+                  if(this.selectedButton === 'weather'){
+                    this.selectedButton = 'None'
+                    this.pageInfos.pop()
+                    this.pageInfos.pushPath({name:"NoneTitle"})
+                  }
+                  else {
+                    this.selectedButton = 'weather'
+                    this.pageInfos.pop()
+                    this.pageInfos.pushPath({ name: "NavDestinationTitle5" })
+                  }
+                })
+
                 ListItem(){
                     Text("自动化设置")
                       .width("100%")
@@ -172,17 +195,19 @@ struct Index {
                       this.pageInfos.pushPath({ name: "NavDestinationTitle4" })
                     }
                   })
+
+
               }
               .width("90%")
               .margin({ top: 12 })
             }
-            .title("车辆管理")
+            .title("管理")
             .mode(NavigationMode.Split)
             .navDestination(this.PageMap)
             .onAppear(() => {
               // 确保首次加载显示NonePage
               if (this.pageInfos.size() === 0) {
-                this.pageInfos.pushPath({ name: "NoneTitle" });
+                  this.pageInfos.pushPath({ name: "NoneTitle" });
               }
             })
           }
@@ -215,10 +240,7 @@ struct Index {
       // currentIndex控制TabContent显示页签
       this.currentIndex = index
       if (index === 0) {
-        // 切换到车辆页时保持NonePage显示
-        this.pageInfos.clear();
-        this.pageInfos.pushPath({ name: "NoneTitle" });
-        this.selectedButton = 'None';
+
       }
     })
     // 滑动改变页签，currentIndex改变触发图标刷新
