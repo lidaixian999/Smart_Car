@@ -134,103 +134,106 @@ export struct Setting_Page{
   @State BOffSt:promptAction.ShowToastOptions = {'message':  this.Auto.name+'关闭.'}
 
   build() {
-    Column() {
-      Row() {
-        Text("设置中心")
-          .fontSize(32)
-          .fontWeight(32)
-          .margin({ left: 32, top: 18, bottom: 18 })
+    Scroll(){
+      Column() {
+        Row() {
+          Text("设置中心")
+            .fontSize(32)
+            .fontWeight(32)
+            .margin({ left: 32, top: 18, bottom: 14 })
+
+        }
+        .height('10%')
+        .width("100%")
+        .height(72)
+        .backgroundColor("#ffffffff")
+        .justifyContent(FlexAlign.Start)
+
+        Grid() {
+          GridItem() {
+            this.Setting_Card($rawfile('Car_show.png'), "汽车状态", "ALL GOOD，状态良好")
+          }
+          .onClick(()=>{
+            promptAction.showToast({
+              message: '汽车状态良好.',
+              duration: 2000
+            })
+          })
+
+          GridItem() {
+            this.Setting_Card($rawfile('Car_relax.png'), "小憩一下", "启动零重力座椅，座椅通风")
+          }
+          .onClick(() => {
+            this.tcp_data.modifyDigit(3, '3');
+            this.tcp_data.modifyDigit(1, '0');
+            this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+            // 更新全局状态
+            AppStorage.setOrCreate('ambientSeatOn', true); // 打开座椅通风
+            AppStorage.setOrCreate('Select_Mod', '2'); // 设置为小憩模式
+            AppStorage.setOrCreate('fanStatus',true)//车辆信息界面的状态更新
+            // AppStorage.setOrCreate("Auto_items",true)//自动化设置页面的状态更新
+            promptAction.showToast({
+              message: '小憩模式已开启.',
+              duration: 2000
+            })
+          })
+
+          GridItem() {
+            this.Setting_Card($rawfile('Car_light.png'), "气氛模式", "打开氛围灯，调为七彩呼吸模式")
+          }
+          .onClick(() => {
+            this.tcp_data.modifyDigit(2, '4');
+            this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+            // 更新全局状态（关键修改）
+            AppStorage.setOrCreate('ambientLightOn', true);
+            AppStorage.setOrCreate('selectedColor', 'multi');
+            AppStorage.setOrCreate('fenStatus',true)
+            promptAction.showToast({
+              message: '氛围灯已开启.',
+              duration: 2000
+            })
+          })
+
+          GridItem() {
+            this.Setting_Card($rawfile('Person_Phone.png'), "设置紧急联系人", "车辆故障时呼叫紧急联系人")
+          }
+          .onClick(() => {
+            this.openEmergencyDialog()
+          })
+
+          GridItem() {
+            this.Setting_Card($rawfile('recharge.png'), "打开充电口", "  ")
+          }
+          .onClick(()=>{
+            promptAction.showToast({
+              message: '充电口已开启.',
+              duration: 2000
+            })
+          })
+
+          GridItem() {
+            this.Setting_Card($rawfile('gas_add.png'), "打开加油口", "  ")
+          }
+          .onClick(()=>{
+            promptAction.showToast({
+              message: '加油口已开启.',
+              duration: 2000
+            })
+          })
+        }
+        .columnsTemplate('1fr 1fr 1fr')
+        .rowsTemplate('1fr 1fr')
+        .columnsGap(5)
+        .rowsGap(15)
+        .height("85%")
+        .width("95%")
+        .margin({ left: 10 })
 
       }
-      .height('10%')
-      .width("100%")
-      .height(72)
-      .backgroundColor("#ffffffff")
-      .justifyContent(FlexAlign.Start)
-
-      Grid() {
-        GridItem() {
-          this.Setting_Card($rawfile('Car_show.png'), "汽车状态", "ALL GOOD，状态良好")
-        }
-        .onClick(()=>{
-          promptAction.showToast({
-            message: '汽车状态良好.',
-            duration: 2000
-          })
-        })
-
-        GridItem() {
-          this.Setting_Card($rawfile('Car_relax.png'), "小憩一下", "启动零重力座椅，座椅通风")
-        }
-        .onClick(() => {
-          this.tcp_data.modifyDigit(3, '3');
-          this.tcp_data.modifyDigit(1, '0');
-          this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
-          // 更新全局状态
-          AppStorage.setOrCreate('ambientSeatOn', true); // 打开座椅通风
-          AppStorage.setOrCreate('Select_Mod', '2'); // 设置为小憩模式
-          AppStorage.setOrCreate('fanStatus',true)//车辆信息界面的状态更新
-          // AppStorage.setOrCreate("Auto_items",true)//自动化设置页面的状态更新
-          promptAction.showToast({
-            message: '小憩模式已开启.',
-            duration: 2000
-          })
-        })
-
-        GridItem() {
-          this.Setting_Card($rawfile('Car_light.png'), "气氛模式", "打开氛围灯，调为七彩呼吸模式")
-        }
-        .onClick(() => {
-          this.tcp_data.modifyDigit(2, '4');
-          this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
-          // 更新全局状态（关键修改）
-          AppStorage.setOrCreate('ambientLightOn', true);
-          AppStorage.setOrCreate('selectedColor', 'multi');
-          AppStorage.setOrCreate('fenStatus',true)
-          promptAction.showToast({
-            message: '氛围灯已开启.',
-            duration: 2000
-          })
-        })
-
-        GridItem() {
-          this.Setting_Card($rawfile('Person_Phone.png'), "设置紧急联系人", "车辆故障时呼叫紧急联系人")
-        }
-        .onClick(() => {
-          this.openEmergencyDialog()
-        })
-
-        GridItem() {
-          this.Setting_Card($rawfile('recharge.png'), "打开充电口", "  ")
-        }
-        .onClick(()=>{
-          promptAction.showToast({
-            message: '充电口已开启.',
-            duration: 2000
-          })
-        })
-
-        GridItem() {
-          this.Setting_Card($rawfile('gas_add.png'), "打开加油口", "  ")
-        }
-        .onClick(()=>{
-          promptAction.showToast({
-            message: '加油口已开启.',
-            duration: 2000
-          })
-        })
-      }
-      .columnsTemplate('1fr 1fr 1fr')
-      .rowsTemplate('1fr 1fr')
-      .columnsGap(5)
-      .rowsGap(15)
-      .height("85%")
-      .width("95%")
-      .margin({ left: 10 })
-
+      .width('100%')
+      .height('100%')
     }
-    .width('100%')
-    .height('100%')
+
   }
 
 

@@ -49,7 +49,7 @@ struct Index {
       //currentIndex为状态变量保证页签与图标实时刷新
       Image(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .width(24)
-        .height(24)
+        .height(20)
       Text(title)//字体
         .fontFamily('HarmonyHeiTi-Medium')
         .fontSize(10)

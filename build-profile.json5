@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/.p12",
+          "storePassword": "0000001B98CE0FDEBCD5D3A99D1CBBC3B09F9EF9B0414A514845F0DF90078DF43C6632043E7EF56BA6F835",
+          "keyAlias": "216",
+          "keyPassword": "0000001B53CB4AFA363700A805095D941EAAF7958196DEC336A116DB75B883D50795CB1A0F65FDB957FA19",
+          "signAlg": "SHA256withECDSA",
+          "profile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216Debug.p7b",
+          "certpath": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216.cer"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",

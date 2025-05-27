@@ -50,125 +50,107 @@ export  struct WeatherPage {
 
   build() {
     NavDestination() {
-      Progress({
-        value: 100,
-        total: 100,
-        style: ProgressStyle.Linear
-      })
-        .color("#ff1f1e1e")
-        .width('90%')
-        .height(10)
-        .margin({ top: 10, bottom: 20 })
+      Scroll(){
+        Column(){
+          Progress({
+            value: 100,
+            total: 100,
+            style: ProgressStyle.Linear
+          })
+            .color("#ff1f1e1e")
+            .width('90%')
+            .height(10)
+            .margin({ top: 10, bottom: 20 })
 
-      Column({ space: 20 }) {
+          Column({ space: 20 }) {
 
-        Text(`数据更新时间: ${this.liveInfo.reporttime}`)
-          .fontSize(20)
-          .opacity(0.7)
-          .margin({ bottom: 50 })
-      }
-      .width('100%')
+            Text(`数据更新时间: ${this.liveInfo.reporttime}`)
+              .fontSize(20)
+              .opacity(0.7)
+              .margin({ bottom: 50 })
+          }
+          .width('100%')
 
-        // Text('天气信息')
-        //   .fontSize(30)
-        //   .fontWeight(FontWeight.Bold)
-        //   .margin({ top: 50 })
-        //   .onClick(() => {
-        //     this.liveInfo = get_wethear(this.liveInfo);
-        //   })
-      Column(){
-        Row({space:20}){
-          Image($rawfile("Weather.png"))
-            .height(64)
-            .width(64)
 
-          Text(`温度: ${this.liveInfo.temperature}°C`)
-            .fontSize(52)
-            .fontWeight(52)
+          Column(){
+            Row({space:20}){
+              Image($rawfile("Weather.png"))
+                .height(64)
+                .width(64)
+
+              Text(`温度: ${this.liveInfo.temperature}°C`)
+                .fontSize(52)
+                .fontWeight(52)
+            }
+            .margin({left:20,bottom:8})
+            .width("90%")
+
+            Row({ space: 20 }){
+              Text(`${this.liveInfo.province}${this.liveInfo.city}`)
+                .fontSize(24)
+                .fontColor(Color.Gray)
+            }
+            .margin({left:20})
+            .width("90%")
+          }.width("100%")
+
+          Divider()
+            .margin({top:8,bottom:8})
+            .width("80%")
+            .color('#ff989898')
+
+
+          Column(){
+            Row({space:10}){
+              Image($rawfile("Wind.png"))
+                .width(32)
+                .height(32)
+              Text(`风向: ${this.liveInfo.winddirection}${this.liveInfo.windpower+"级"}`)
+                .fontSize(32)
+            }.width("90%")
+            .margin({left:20})
+
+            Divider()
+              .margin({top:8,bottom:8})
+              .width("80%")
+              .color('#ff989898')
+
+            Row({space:10}){
+              Image($rawfile("Wet.png"))
+                .width(32)
+                .height(32)
+              Text(`湿度: ${this.liveInfo.humidity}`)
+                .fontSize(32)
+            }.width("90%")
+            .margin({left:20})
+
+            Divider()
+              .margin({top:8,bottom:8})
+              .width("80%")
+              .color('#ff989898')
+
+
+            Row({space:10}){
+              Image($rawfile("Weather_2.png"))
+                .width(32)
+                .height(32)
+
+
+
+              Text(`天气状况: ${this.liveInfo.weather}`)
+                .fontSize(32)
+            }.width("90%")
+            .margin({left:20})
+
+            Divider()
+              .margin({top:8,bottom:8})
+              .width("80%")
+              .color('#ff989898')
+          }
         }
-        .margin({left:20,bottom:8})
-        .width("90%")
-
-        Row({ space: 20 }){
-          Text(`${this.liveInfo.province}${this.liveInfo.city}`)
-            .fontSize(24)
-            .fontColor(Color.Gray)
-        }
-        .margin({left:20})
-        .width("90%")
-      }.width("100%")
-
-      Divider()
-        .margin({top:8,bottom:8})
-        .width("80%")
-        .color('#ff989898')
-
-
-      Column(){
-        Row({space:10}){
-          Image($rawfile("Wind.png"))
-            .width(32)
-            .height(32)
-          Text(`风向: ${this.liveInfo.winddirection}${this.liveInfo.windpower+"级"}`)
-            .fontSize(32)
-        }.width("90%")
-        .margin({left:20})
-
-        Divider()
-          .margin({top:8,bottom:8})
-          .width("80%")
-          .color('#ff989898')
-
-        Row({space:10}){
-          Image($rawfile("Wet.png"))
-            .width(32)
-            .height(32)
-          Text(`湿度: ${this.liveInfo.humidity}`)
-            .fontSize(32)
-        }.width("90%")
-        .margin({left:20})
-
-        Divider()
-          .margin({top:8,bottom:8})
-          .width("80%")
-          .color('#ff989898')
-
-
-        Row({space:10}){
-          Image($rawfile("Weather_2.png"))
-            .width(32)
-            .height(32)
-
-
-
-          Text(`天气状况: ${this.liveInfo.weather}`)
-            .fontSize(32)
-        }.width("90%")
-        .margin({left:20})
-
-        Divider()
-          .margin({top:8,bottom:8})
-          .width("80%")
-          .color('#ff989898')
       }
 
 
-        //
-        // Row({ space: 20 }) {
-        //   Column({ space: 10 }) {
-        //     Text(`省份: ${this.liveInfo.province}`)
-        //     Text(`城市: ${this.liveInfo.city}`)
-        //   }
-        //
-        //   Column({ space: 10 }) {
-        //       Text(`温度: ${this.liveInfo.temperature}°C`)
-        //     Text(`温度: ${this.liveInfo.temperature}°C`)
-        //     Text(`风向: ${this.liveInfo.winddirection}`)
-        //     Text(`风力: ${this.liveInfo.windpower}`)
-        //     Text(`湿度: ${this.liveInfo.humidity}`)
-        //   }
-        // }
-        // .padding({ left: 20, right: 20 })
 
     }
     .title(this.buildTitle('当前天气'))
