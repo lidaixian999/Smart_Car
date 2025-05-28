@@ -72,158 +72,162 @@ export struct carInformationItem {
   }
   build() {
     NavDestination() {
-      Column() {
-        // 进度条部分
-        Row() {
-          Progress({
-            value: this.progress,
-            total: 100,
-            style: ProgressStyle.Linear
-          })
-            .color("#ff1f1e1e") // 进度条颜色
-            .width('100%')
-            .height(20)
-            .borderRadius(10); // 添加圆角效果
+      Scroll(){
+        Column() {
+          // 进度条部分
+          Row() {
+            Progress({
+              value: this.progress,
+              total: 100,
+              style: ProgressStyle.Linear
+            })
+              .color("#ff1f1e1e") // 进度条颜色
+              .width('100%')
+              .height(20)
+              .borderRadius(10); // 添加圆角效果
+          }
+          .margin({ top: "10px", bottom: "10px" }) // 上下均增加边距
+          .width("100%")
+          .height("auto");
+
+          // 剩余电量信息
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_battery.png'))
+              .width('36vp') // 小一点的图标尺寸
+              .height('36vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("剩余电量: " + this.progress + "%  ")
+              .fontSize("2%") // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12,top:5 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          Divider()
+
+          // 剩余里程信息
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_car.png'))
+              .width('48vp') // 图标尺寸与电量图标一致
+              .height('48vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("剩余里程: " + (this.progress * 5) + "km")
+              .fontSize(24) // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          Divider()
+
+          //亮度信息
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_light.png'))
+              .width('48vp') // 小一点的图标尺寸
+              .height('48vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("大灯亮度: " + this.light_number+"lx")
+              .fontSize(24) // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          Divider()
+
+          //风扇状态
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_fan.png'))
+              .width('48vp') // 小一点的图标尺寸
+              .height('48vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("自动风扇:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
+              .fontSize(24) // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          Divider()
+
+          //灯光状态
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_fenwei.png'))
+              .width('48vp') // 小一点的图标尺寸
+              .height('48vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("氛围灯:   " + `${this.fenStatus===true?'开':'关'}` + "      ")
+              .fontSize(24) // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          Divider()
+
+          //当前温度
+          Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
+            Image($rawfile('ic_temp.png'))
+              .width('48vp') // 小一点的图标尺寸
+              .height('48vp')
+              .objectFit(ImageFit.Cover)
+              .margin({ left: 12, right: 12 }) // 调整左右边距
+
+            Text("当前温度:   " + `${this.carinTemp}` + "℃ ")
+              .fontSize(24) // 较小的字体尺寸
+              .fontWeight('bold')
+              .textAlign(TextAlign.Center)
+              .margin({ right: 12 });
+          }
+          .margin({ top: "15px" }) // Flex部分的上边距
+          .width("100%")
+          .height("13%");
+
+          // // 信息列表
+
+          //   //4. 电池温度
+          //   this.buildEditableItem(
+          //         $r('app.media.ic_temp'),
+          //         '电池温度',
+          //         `${this.batteryTemp}°C`
+          //       )
+          //   //5.车内温度
+          //   this.buildEditableItem(
+          //         $r('app.media.ic_car_temp'),
+          //         '车内温度',
+          //         `${this.carinTemp}°C`
+          //       )
+
         }
-        .margin({ top: "10px", bottom: "10px" }) // 上下均增加边距
-        .width("100%")
-        .height("auto");
+        .padding(20)
+      }.height('100%')
+      .width('100%')
 
-        // 剩余电量信息
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_battery.png'))
-            .width('48vp') // 小一点的图标尺寸
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("剩余电量: " + this.progress + "%  ")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        Divider()
-
-        // 剩余里程信息
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_car.png'))
-            .width('48vp') // 图标尺寸与电量图标一致
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("剩余里程: " + (this.progress * 5) + "km")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        Divider()
-
-        //亮度信息
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_light.png'))
-            .width('48vp') // 小一点的图标尺寸
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("大灯亮度: " + this.light_number+"lx")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        Divider()
-
-        //风扇状态
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_fan.png'))
-            .width('48vp') // 小一点的图标尺寸
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("自动风扇:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        Divider()
-
-        //灯光状态
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_fenwei.png'))
-            .width('48vp') // 小一点的图标尺寸
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("氛围灯:   " + `${this.fenStatus===true?'开':'关'}` + "      ")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        Divider()
-
-        //当前温度
-        Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
-          Image($rawfile('ic_temp.png'))
-            .width('48vp') // 小一点的图标尺寸
-            .height('48vp')
-            .objectFit(ImageFit.Cover)
-            .margin({ left: 12, right: 12 }) // 调整左右边距
-
-          Text("当前温度:   " + `${this.carinTemp}` + "℃ ")
-            .fontSize(24) // 较小的字体尺寸
-            .fontWeight('bold')
-            .textAlign(TextAlign.Center)
-            .margin({ right: 12 });
-        }
-        .margin({ top: "15px" }) // Flex部分的上边距
-        .width("100%")
-        .height("13%");
-
-        // // 信息列表
-
-        //   //4. 电池温度
-        //   this.buildEditableItem(
-        //         $r('app.media.ic_temp'),
-        //         '电池温度',
-        //         `${this.batteryTemp}°C`
-        //       )
-        //   //5.车内温度
-        //   this.buildEditableItem(
-        //         $r('app.media.ic_car_temp'),
-        //         '车内温度',
-        //         `${this.carinTemp}°C`
-        //       )
-
-      }
-      .padding(20)
     }
     .title(this.buildTitle('车辆信息'))
   }

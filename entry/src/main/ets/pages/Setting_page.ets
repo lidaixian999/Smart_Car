@@ -33,58 +33,61 @@ struct EmergencyContactDialog {
   }
 
   build() {
-    Column({ space: 20 }) {
-      Text('设置紧急联系人')
-        .fontSize(24)
-        .margin({ top: 20 })
-      // 显示当前联系人信息（如果有）
-      if (this.currentContact.name) {
-        Text(`当前联系人: ${this.currentContact.name} (${this.currentContact.phone})`)
-          .fontSize(16)
-          .fontColor(Color.Gray)
-          .margin({ bottom: 10 })
-      }
-      // 姓名输入
-      TextInput({ placeholder: '姓名' })
-        .width('90%')
-        .height(50)
-        .onChange((value: string) => {
-          this.tempName = value
-        })
-
-      // 电话输入
-      TextInput({ placeholder: '手机号' })
-        .width('90%')
-        .height(50)
-        .type(InputType.Number)
-        .maxLength(11)
-        .onChange((value: string) => {
-          this.tempPhone = value
-        })
-
-      Row({ space: 30 }) {
-        Button('取消')
-          .backgroundColor('#eca94e')
-          .onClick(() => {
-            this.controller.close()
+    Scroll(){
+      Column({ space: 20 }) {
+        Text('设置紧急联系人')
+          .fontSize(24)
+          .margin({ top: 20 })
+        // 显示当前联系人信息（如果有）
+        if (this.currentContact.name) {
+          Text(`当前联系人: ${this.currentContact.name} (${this.currentContact.phone})`)
+            .fontSize(16)
+            .fontColor(Color.Gray)
+            .margin({ bottom: 10 })
+        }
+        // 姓名输入
+        TextInput({ placeholder: '姓名' })
+          .width('90%')
+          .height(50)
+          .onChange((value: string) => {
+            this.tempName = value
           })
 
-        Button('保存')
-          .backgroundColor('#eca94e')
-          .onClick(() => {
-            if (this.validateInput()) {
-              this.confirm(this.tempName, this.tempPhone)
-              promptAction.showToast({
-                message: '紧急联系人设置成功',
-                duration: 2000
-              })
+        // 电话输入
+        TextInput({ placeholder: '手机号' })
+          .width('90%')
+          .height(50)
+          .type(InputType.Number)
+          .maxLength(11)
+          .onChange((value: string) => {
+            this.tempPhone = value
+          })
+
+        Row({ space: 30 }) {
+          Button('取消')
+            .backgroundColor('#eca94e')
+            .onClick(() => {
               this.controller.close()
-            }
-          })
+            })
+
+          Button('保存')
+            .backgroundColor('#eca94e')
+            .onClick(() => {
+              if (this.validateInput()) {
+                this.confirm(this.tempName, this.tempPhone)
+                promptAction.showToast({
+                  message: '紧急联系人设置成功',
+                  duration: 2000
+                })
+                this.controller.close()
+              }
+            })
+        }
+        .margin({ bottom: 20 })
       }
-      .margin({ bottom: 20 })
+      .width('100%')
     }
-    .width('100%')
+
   }
 
   private validateInput(): boolean {
@@ -180,7 +183,7 @@ export struct Setting_Page{
           })
 
           GridItem() {
-            this.Setting_Card($rawfile('Car_light.png'), "气氛模式", "打开氛围灯，调为七彩呼吸模式")
+            this.Setting_Card($rawfile('Car_light.png'), "气氛模式", "打开氛围灯，调为呼吸模式")
           }
           .onClick(() => {
             this.tcp_data.modifyDigit(2, '4');
@@ -230,6 +233,7 @@ export struct Setting_Page{
         .width("95%")
         .margin({ left: 10,top:10,bottom:10})
       }
+      .margin({bottom:"10%"})
       .width('100%')
       .height('100%')
     }
@@ -241,7 +245,7 @@ export struct Setting_Page{
 
   @Builder
   Setting_Card(imageUrl:Resource, title: string, description: string) {
-    Column({ space: 3 }) {
+    Column({ space: "1%" }) {
       Image(imageUrl)
         .width('80%')
         .height("80%")
@@ -249,7 +253,7 @@ export struct Setting_Page{
         .borderRadius(10)
 
       Text(title)
-        .fontSize("10%")
+        .fontSize("7%")
         .fontWeight(FontWeight.Bold)
 
       Text(description)

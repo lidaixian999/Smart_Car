@@ -183,6 +183,7 @@ struct Index {
                       .fontSize(16)
                       .fontWeight(FontWeight.Bold)
                       .textAlign(TextAlign.Center)
+
                   }.onClick(() => {
                     if(this.selectedButton === 'autoSet'){
                       this.selectedButton = 'None'
