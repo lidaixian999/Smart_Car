@@ -62,12 +62,11 @@ export  struct WeatherPage {
             .height(10)
             .margin({ top: 10, bottom: 20 })
 
-          Column({ space: 20 }) {
-
+          Column({}) {
             Text(`数据更新时间: ${this.liveInfo.reporttime}`)
               .fontSize(20)
               .opacity(0.7)
-              .margin({ bottom: 50 })
+              .margin({ bottom: 20 })
           }
           .width('100%')
 
@@ -79,7 +78,7 @@ export  struct WeatherPage {
                 .width(64)
 
               Text(`温度: ${this.liveInfo.temperature}°C`)
-                .fontSize(52)
+                .fontSize(32)
                 .fontWeight(52)
             }
             .margin({left:20,bottom:8})
@@ -149,7 +148,6 @@ export  struct WeatherPage {
           }
         }
       }
-
 
 
     }

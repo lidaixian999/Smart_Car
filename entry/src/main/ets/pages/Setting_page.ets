@@ -160,6 +160,7 @@ export struct Setting_Page{
             })
           })
 
+
           GridItem() {
             this.Setting_Card($rawfile('Car_relax.png'), "小憩一下", "启动零重力座椅，座椅通风")
           }
@@ -225,10 +226,9 @@ export struct Setting_Page{
         .rowsTemplate('1fr 1fr')
         .columnsGap(5)
         .rowsGap(15)
-        .height("85%")
+        .height("95%")
         .width("95%")
-        .margin({ left: 10 })
-
+        .margin({ left: 10,top:10,bottom:10})
       }
       .width('100%')
       .height('100%')
@@ -241,19 +241,19 @@ export struct Setting_Page{
 
   @Builder
   Setting_Card(imageUrl:Resource, title: string, description: string) {
-    Column({ space: 10 }) {
+    Column({ space: 3 }) {
       Image(imageUrl)
-        .width('100%')
-        .height(150)
+        .width('80%')
+        .height("80%")
         .objectFit(ImageFit.Cover)
         .borderRadius(10)
 
       Text(title)
-        .fontSize(20)
+        .fontSize("10%")
         .fontWeight(FontWeight.Bold)
 
       Text(description)
-        .fontSize(14)
+        .fontSize("2%")
         .fontColor(Color.Gray)
     }
     .width('100%')
