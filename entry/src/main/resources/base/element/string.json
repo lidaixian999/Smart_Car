@@ -20,5 +20,10 @@
       "name": "softname",
       "value": "指尖智舱"
     }
+  ,
+    {
+      "name": "location",
+      "value": "地图定位"
+    }
   ]
 }
