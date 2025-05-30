@@ -109,87 +109,78 @@ import { BusinessError } from '@kit.BasicServicesKit';
           .width('90%')
           .height(10)
           .margin({ top: 10, bottom: 20 })
-
-        // 氛围灯控制区
-        Column() {
-          Text('氛围灯')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .margin({ bottom: 15 })
-            .width('100%')
-
-          Flex({ justifyContent: FlexAlign.SpaceAround }) {
-            Button('是')
-              .width(100)
-              .height(40)
-              .backgroundColor(this.ambientLightOn ? '#eca94e' : '#F5F5F5')
-              .fontColor(this.ambientLightOn ? '#000000' : '#999999')
-              .onClick(() => {
-                this.ambientLightOn = true;
-                this.selectedColor ='multi'
-                this.tcp_data.modifyDigit(2,"4")
-                AppStorage.setOrCreate('fenStatus',true)
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
-                // this.send('ambient_on');
-              })
-
-            Button('否')
-              .width(100)
-              .height(40)
-              .backgroundColor(!this.ambientLightOn ? '#eca94e' : '#F5F5F5')
-              .fontColor(!this.ambientLightOn ? '#000000' : '#999999')
-              .onClick(() => {
-                this.ambientLightOn = false;
-                this.tcp_data.modifyDigit(2,"0")
-                AppStorage.setOrCreate('fenStatus',false)
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
-                // this.send('ambient_off');
-              })
-          }
-        }
-        .width('90%')
-        .padding(15)
-        .backgroundColor('#FAFAFA')
-        .borderRadius(12)
-        .margin({ bottom: 20 })
-      if(this.ambientLightOn){
-        // 灯光模式控制区
-        Column() {
-          Text('灯光模式')
-            .fontSize(20)
-            .fontWeight(FontWeight.Bold)
-            .margin({ bottom: 15 })
-            .width('100%')
-
-          Grid() {
-            GridItem() {
-              this.buildColorButton('七彩灯', 'multi')
+        Scroll() {
+          // 氛围灯控制区
+          Column() {
+            Text('氛围灯')
+              .fontSize(20)
+              .fontWeight(FontWeight.Bold)
+              .margin({ bottom: 15 })
+              .width('100%')
+            Flex({ justifyContent: FlexAlign.SpaceAround }) {
+              Button('是')
+                .width(100)
+                .height(40)
+                .backgroundColor(this.ambientLightOn ? '#eca94e' : '#F5F5F5')
+                .fontColor(this.ambientLightOn ? '#000000' : '#999999')
+                .onClick(() => {
+                  this.ambientLightOn = true;
+                  this.selectedColor ='multi'
+                  this.tcp_data.modifyDigit(2,"4")
+                  AppStorage.setOrCreate('fenStatus',true)
+                  this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                  // this.send('ambient_on');
+                })
+              Button('否')
+                .width(100)
+                .height(40)
+                .backgroundColor(!this.ambientLightOn ? '#eca94e' : '#F5F5F5')
+                .fontColor(!this.ambientLightOn ? '#000000' : '#999999')
+                .onClick(() => {
+                  this.ambientLightOn = false;
+                  this.tcp_data.modifyDigit(2,"0")
+                  AppStorage.setOrCreate('fenStatus',false)
+                  this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                  // this.send('ambient_off');
+                })
             }
-            GridItem() {
-              this.buildColorButton('红', 'red')
-            }
-            GridItem() {
-              this.buildColorButton('绿', 'green')
-            }
-            GridItem() {
-              this.buildColorButton('蓝', 'blue')
-
+            if(this.ambientLightOn){
+              // 灯光模式控制区
+              Blank()
+              Text('灯光模式')
+                .fontSize(20)
+                .fontWeight(FontWeight.Bold)
+                .margin({ bottom: 15 ,top:15})
+                .width('100%')
+              Grid() {
+                GridItem() {
+                  this.buildColorButton('七彩灯', 'multi')
+                }
+                GridItem() {
+                  this.buildColorButton('红', 'red')
+                }
+                GridItem() {
+                  this.buildColorButton('绿', 'green')
+                }
+                GridItem() {
+                  this.buildColorButton('蓝', 'blue')
+                }
+              }
+              .columnsTemplate('1fr 1fr')
+              .rowsTemplate('1fr 1fr')
+              .columnsGap(15)
+              .rowsGap(15)
+              .height(180)
             }
           }
-          .columnsTemplate('1fr 1fr')
-          .rowsTemplate('1fr 1fr')
-          .columnsGap(15)
-          .rowsGap(15)
-          .height(180)
+          .width('90%')
+          .padding(15)
+          .backgroundColor('#FAFAFA')
+          .borderRadius(12)
+          .margin({ bottom: 20 })
+
         }
-        .width('90%')
-        .padding(15)
-        .backgroundColor('#FAFAFA')
-        .borderRadius(12)
       }
-
-      }
-
       .width('100%')
       .alignItems(HorizontalAlign.Center)
     }

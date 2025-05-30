@@ -76,14 +76,11 @@ struct Index {
     Tabs({ barPosition: BarPosition.End, controller: this.tabsController }) {
       TabContent() {
         Flex({direction:FlexDirection.Row}) {
-          car_page_item();
-
-          Divider().width(10).height("100%").margin({top:20,bottom:20}).vertical(true)
-
+          // Divider().width(10).height("100%").margin({top:20,bottom:20}).vertical(true)
           Column() {
             Navigation(this.pageInfos) {
               List({ space: 12 }) {
-
+                car_page_item();
                   ListItem() {
                     Text("车辆信息")
                       .width("100%")
@@ -94,7 +91,6 @@ struct Index {
                       .fontSize(16)
                       .fontWeight(FontWeight.Bold)
                       .textAlign(TextAlign.Center)
-
                   }.onClick(() => {
                     if(this.selectedButton === 'carInformation'){
                       this.selectedButton = 'None'
@@ -107,7 +103,6 @@ struct Index {
                       this.pageInfos.pushPath({ name: "NavDestinationTitle1" })
                     }
                   })
-
                 ListItem() {
                   Text("灯光控制")
                     .width("100%")
