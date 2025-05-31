@@ -1,12 +1,12 @@
 //灯光控制页面
-import TCPSocketServerSingleton from '../model/Tcp';
+import { SsapManager } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 import { socket } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 
 @Component
   export struct LightControl {
-  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance()
     progress: number = 100; // 进度值，范围 0 - 100
   @StorageLink('ambientLightOn') ambientLightOn: boolean = false;
@@ -52,7 +52,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
             console.log('未知颜色选择');
         }
 
-        this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+        this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
       })
   }
 
@@ -129,7 +129,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
                 this.selectedColor ='multi'
                 this.tcp_data.modifyDigit(2,"4")
                 AppStorage.setOrCreate('fenStatus',true)
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                 // this.send('ambient_on');
               })
 
@@ -142,7 +142,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
                 this.ambientLightOn = false;
                 this.tcp_data.modifyDigit(2,"0")
                 AppStorage.setOrCreate('fenStatus',false)
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                 // this.send('ambient_off');
               })
           }

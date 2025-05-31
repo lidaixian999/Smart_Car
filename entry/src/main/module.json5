@@ -33,7 +33,7 @@
             ]
           }
         ],
-          "orientation": "auto_rotation_landscape"
+          "orientation": "auto_rotation"
       }
     ],
     "extensionAbilities": [
@@ -63,7 +63,7 @@
           "abilities": [
             "EntryAbility"
           ],
-          "when":"inuse"
+          "when":"always"
         }
       },
       {
@@ -75,9 +75,31 @@
           "abilities": [
             "EntryAbility"
           ],
-          "when":"inuse"
+          "when":"always"
         }
+      },
+      {
+        "name": "ohos.permission.ACCESS_NEARLINK",
+        "reason": "$string:permission_reason_nearlink",
+        "usedScene": {
+          "abilities": [
+            "EntryFormAbility"
+          ],
+          "when": "always",
+        },
       }
     ]
+//    "requestPermissions": [
+//      {
+//        "name": "ohos.permission.ACCESS_NEARLINK",
+//        "reason": "$string:permission_reason_nearlink",
+//        "usedScene": {
+//          "abilities": [
+//            "EntryFormAbility"
+//          ],
+//          "when": "inuse",
+//        },
+//      },
+//    ]
   }
 }

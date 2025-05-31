@@ -14,7 +14,6 @@ class TCPSocketServerSingleton {
     //   port: 4120
     // };// 测试地址
 
-
   bindAddr: socket.NetAddress = {
       address:  "192.168.137.22",
       port: 5678

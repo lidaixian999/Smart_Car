@@ -1,6 +1,6 @@
 //自动化设置页面
 
-import TCPSocketServerSingleton from '../model/Tcp';
+import { SsapManager } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 import { promptAction } from '@kit.ArkUI';
 import { it } from '@ohos/hypium';
@@ -11,7 +11,7 @@ import {Auto_item1} from '../viewmodel/Auto_item'
 @Preview
 @Component
 export struct AutoSet {
-  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance()
 
   progress: number = 100; // 进度值，范围 0 - 100
@@ -65,7 +65,7 @@ export struct AutoSet {
 
 @Component
 struct Auto_list_items{
-  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance()
   @State Auto : Auto_item1 = {name:'',status:false}
   @State BOnSt:promptAction.ShowToastOptions = {'message': this.Auto.name+'开启.'}
@@ -101,7 +101,7 @@ struct Auto_list_items{
                AppStorage.setOrCreate('fanStatus',true)
              }
 
-             this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+             this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
            } else {
              promptAction.showToast(this.BOffSt)
              if(this.Auto.name == "自动车前大灯"){
@@ -113,7 +113,7 @@ struct Auto_list_items{
                AppStorage.setOrCreate('ambientSeatOn', false);
                AppStorage.setOrCreate('fanStatus',false)
              }
-             this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+             this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
            }
          })
      }

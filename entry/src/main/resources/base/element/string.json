@@ -24,6 +24,11 @@
     {
       "name": "location",
       "value": "地图定位"
+    },
+    {
+      "name": "permission_reason_nearlink",
+      "value": "connect"
     }
+
   ]
 }

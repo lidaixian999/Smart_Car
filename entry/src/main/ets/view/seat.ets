@@ -1,9 +1,9 @@
-import TCPSocketServerSingleton from '../model/Tcp';
+import { SsapManager } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 @Component
 export struct SeatItem {
 
-  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance();
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
@@ -45,7 +45,7 @@ export struct SeatItem {
             console.log('未知模式选择');
         }
         this.selected_Mod = Mod;
-        this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+        this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
         // this.send(`color_${color}`);
       })
   }
@@ -120,7 +120,7 @@ export struct SeatItem {
             .onClick(() => {
               this.ambientSeatOn = true;
               this.tcp_data.modifyDigit(1,"2")
-              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
               // AppStorage.setOrCreate('fanStatus',true)
               // this.send('ambient_on');
             })
@@ -133,7 +133,7 @@ export struct SeatItem {
             .onClick(() => {
               this.ambientSeatOn = false;
               this.tcp_data.modifyDigit(1,"1")
-              this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+              this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
               // AppStorage.setOrCreate('fanStatus',false)
               // this.send('ambient_off');
             })

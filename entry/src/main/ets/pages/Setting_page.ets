@@ -1,4 +1,4 @@
-import TCPSocketServerSingleton from '../model/Tcp';
+import { SsapManager } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 import {Auto_item1} from '../viewmodel/Auto_item'
 import {EmergencyContact} from '../viewmodel/Auto_item'
@@ -130,7 +130,7 @@ export struct Setting_Page{
     builder: EmergencyContactDialog(),
   })
 
-  private tcpSingleton = TCPSocketServerSingleton.getInstance();
+  private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance()
   @State Auto : Auto_item1 = {name:'',status:false}
   @State BOnSt:promptAction.ShowToastOptions = {'message': this.Auto.name+'已开启.'}
@@ -170,7 +170,7 @@ export struct Setting_Page{
           .onClick(() => {
             this.tcp_data.modifyDigit(3, '3');
             this.tcp_data.modifyDigit(1, '0');
-            this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+            this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
             // 更新全局状态
             AppStorage.setOrCreate('ambientSeatOn', true); // 打开座椅通风
             AppStorage.setOrCreate('Select_Mod', '2'); // 设置为小憩模式
@@ -187,7 +187,7 @@ export struct Setting_Page{
           }
           .onClick(() => {
             this.tcp_data.modifyDigit(2, '4');
-            this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+            this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
             // 更新全局状态（关键修改）
             AppStorage.setOrCreate('ambientLightOn', true);
             AppStorage.setOrCreate('selectedColor', 'multi');

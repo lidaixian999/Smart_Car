@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/.p12",
-          "storePassword": "0000001B98CE0FDEBCD5D3A99D1CBBC3B09F9EF9B0414A514845F0DF90078DF43C6632043E7EF56BA6F835",
-          "keyAlias": "216",
-          "keyPassword": "0000001B53CB4AFA363700A805095D941EAAF7958196DEC336A116DB75B883D50795CB1A0F65FDB957FA19",
+          "certpath": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B068A99CCACC300FAB7A5DE4F7D438801E71B9172C98F264A0D9BCCA174DA039AE1F39687B24290",
+          "profile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.p7b",
           "signAlg": "SHA256withECDSA",
-          "profile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216Debug.p7b",
-          "certpath": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216.cer"
+          "storeFile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.p12",
+          "storePassword": "0000001B02E53C7EDACBCE8EB3A28E1CFB8400C87CA5B540EA45D2FDB43B07DD43D3B3C2A930DC2E8768C7"
         }
       }
     ],
@@ -19,7 +19,7 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.3(15)",
+        "compatibleSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -31,7 +31,7 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
