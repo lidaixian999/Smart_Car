@@ -12,7 +12,7 @@ import { SsapManager } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 import { abilityAccessCtrl, bundleManager, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
-
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 async function checkPermissionGrant(permission: Permissions): Promise<abilityAccessCtrl.GrantStatus> {
   let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
@@ -61,6 +61,26 @@ async function checkPermissions(): Promise<void> {
 @Entry
 @Component
 struct Index {
+  logTag: string = 'Index';
+  domainId: number = 0x0000;
+
+  //    atManager.requestPermissionsFromUser(context, ['ohos.permission.LOCATION']);
+  //     atManager.requestPermissionsFromUser(context, ['ohos.permission.APPROXIMATELY_LOCATION']);
+
+aboutToAppear(): void {
+  let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
+  try {
+    let context = getContext(this);
+    // ohos.permission.ACCESS_NEARLINK is needed in this example.
+    // This HAP will ask user for permission when it's opened in the first time.
+    atManager.requestPermissionsFromUser(context, ['ohos.permission.ACCESS_NEARLINK']);
+
+  } catch (err) {
+    hilog.error(this.domainId, this.logTag,
+      `errCode: ${(err as BusinessError).code}, errMessage: ${(err as BusinessError).message}`);
+  }
+}
+
 
   private ssapManager = SsapManager.getInstance();
   private tcp_data = GlobalData.getInstance()

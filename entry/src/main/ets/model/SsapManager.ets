@@ -42,7 +42,7 @@ export class SsapManager {
   // 设备配置
   private readonly serviceUuid: string = '37BEA880-FC70-11EA-B720-000000002222';
   private readonly propertyUuid: string = '37BEA880-FC70-11EA-B720-000000002323';
-  private readonly deviceAddress: string = 'F2:65:05:DB:7F:93';
+  private readonly deviceAddress: string = 'F4:A5:BC:73:79:09';
 
   private property: ssap.Property;
 
