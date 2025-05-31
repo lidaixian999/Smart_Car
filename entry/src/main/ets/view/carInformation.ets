@@ -93,8 +93,8 @@ export struct carInformationItem {
           // 剩余电量信息
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_battery.png'))
-              .width('36vp') // 小一点的图标尺寸
-              .height('36vp')
+              .width('32vp') // 小一点的图标尺寸
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
@@ -113,13 +113,13 @@ export struct carInformationItem {
           // 剩余里程信息
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_car.png'))
-              .width('48vp') // 图标尺寸与电量图标一致
-              .height('48vp')
+              .width('32vp') // 图标尺寸与电量图标一致
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
             Text("剩余里程: " + (this.progress * 5) + "km")
-              .fontSize(24) // 较小的字体尺寸
+              .fontSize("2%") // 较小的字体尺寸
               .fontWeight('bold')
               .textAlign(TextAlign.Center)
               .margin({ right: 12 });
@@ -133,13 +133,13 @@ export struct carInformationItem {
           //亮度信息
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_light.png'))
-              .width('48vp') // 小一点的图标尺寸
-              .height('48vp')
+              .width('32vp') // 小一点的图标尺寸
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
             Text("大灯亮度: " + this.light_number+"lx")
-              .fontSize(24) // 较小的字体尺寸
+              .fontSize("2%") // 较小的字体尺寸
               .fontWeight('bold')
               .textAlign(TextAlign.Center)
               .margin({ right: 12 });
@@ -153,13 +153,13 @@ export struct carInformationItem {
           //风扇状态
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_fan.png'))
-              .width('48vp') // 小一点的图标尺寸
-              .height('48vp')
+              .width('32vp') // 小一点的图标尺寸
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
             Text("自动风扇:   " + `${this.fanStatus===true?'开':'关'}` + "      ")
-              .fontSize(24) // 较小的字体尺寸
+              .fontSize("2%") // 较小的字体尺寸
               .fontWeight('bold')
               .textAlign(TextAlign.Center)
               .margin({ right: 12 });
@@ -173,13 +173,13 @@ export struct carInformationItem {
           //灯光状态
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_fenwei.png'))
-              .width('48vp') // 小一点的图标尺寸
-              .height('48vp')
+              .width('32vp') // 小一点的图标尺寸
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
             Text("氛围灯:   " + `${this.fenStatus===true?'开':'关'}` + "      ")
-              .fontSize(24) // 较小的字体尺寸
+              .fontSize("2%") // 较小的字体尺寸
               .fontWeight('bold')
               .textAlign(TextAlign.Center)
               .margin({ right: 12 });
@@ -193,13 +193,13 @@ export struct carInformationItem {
           //当前温度
           Flex({ justifyContent: FlexAlign.SpaceBetween, direction: FlexDirection.Row }) {
             Image($rawfile('ic_temp.png'))
-              .width('48vp') // 小一点的图标尺寸
-              .height('48vp')
+              .width('32vp') // 小一点的图标尺寸
+              .height('32vp')
               .objectFit(ImageFit.Cover)
               .margin({ left: 12, right: 12 }) // 调整左右边距
 
             Text("当前温度:   " + `${this.carinTemp}` + "℃ ")
-              .fontSize(24) // 较小的字体尺寸
+              .fontSize("2%") // 较小的字体尺寸
               .fontWeight('bold')
               .textAlign(TextAlign.Center)
               .margin({ right: 12 });
@@ -207,21 +207,6 @@ export struct carInformationItem {
           .margin({ top: "15px" }) // Flex部分的上边距
           .width("100%")
           .height("13%");
-
-          // // 信息列表
-
-          //   //4. 电池温度
-          //   this.buildEditableItem(
-          //         $r('app.media.ic_temp'),
-          //         '电池温度',
-          //         `${this.batteryTemp}°C`
-          //       )
-          //   //5.车内温度
-          //   this.buildEditableItem(
-          //         $r('app.media.ic_car_temp'),
-          //         '车内温度',
-          //         `${this.carinTemp}°C`
-          //       )
 
         }
         .padding(20)

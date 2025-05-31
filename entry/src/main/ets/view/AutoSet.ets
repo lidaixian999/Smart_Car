@@ -50,10 +50,12 @@ export struct AutoSet {
       .height("auto");
 
       Flex({justifyContent:FlexAlign.Start,direction:FlexDirection.Column}){
-        List({space:20}){
-        ForEach(this.autoItems,(item:Auto_item1)=>{
-          Auto_list_items({ Auto:item })
-        })
+        Scroll(){
+          List({space:15}){
+            ForEach(this.autoItems,(item:Auto_item1)=>{
+              Auto_list_items({ Auto:item })
+            })
+          }.height("100%")
         }
       }
       .height("100%")
@@ -80,7 +82,7 @@ struct Auto_list_items{
          .height(50)
          .padding({left: 10})
          .fontWeight(FontWeight.Bold)
-         .fontSize(25)
+         .fontSize(20)
          .textAlign(TextAlign.Start)
          .fontColor($r('app.color.brouwn'))
        Blank()

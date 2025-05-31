@@ -69,81 +69,72 @@ export struct SeatItem {
       .height("auto");
 
       // 座椅模式控制区
-      Column() {
-        Text('座椅模式')
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .margin({ bottom: 15 })
-          .width('100%')
+      Scroll(){
+        Column() {
+          Text('座椅模式')
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .margin({ bottom: 15 })
+            .width('100%')
 
-        Grid() {
-          GridItem() {
-            this.buildColorButton('正常模式', '1')
+          Grid() {
+            GridItem() {
+              this.buildColorButton('正常模式', '1')
+            }
+            GridItem() {
+              this.buildColorButton('小憩模式', '2')
+            }
+            GridItem() {
+              this.buildColorButton('躺平模式', '3')
+            }
           }
-          GridItem() {
-            this.buildColorButton('小憩模式', '2')
-          }
-          GridItem() {
-            this.buildColorButton('躺平模式', '3')
+          .columnsTemplate('1fr 1fr')
+          .rowsTemplate('1fr 1fr')
+          .columnsGap(15)
+          .rowsGap(15)
+          .height(180)
+
+          Text('手动打开座椅通风')
+            .fontSize(20)
+            .fontWeight(FontWeight.Bold)
+            .margin({ bottom: 15 })
+            .width('100%')
+
+          Flex({ justifyContent: FlexAlign.SpaceAround }) {
+            Button('是')
+              .width(100)
+              .height(40)
+              .backgroundColor(this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
+              .fontColor(this.ambientSeatOn ? '#000000' : '#999999')
+              .onClick(() => {
+                this.ambientSeatOn = true;
+                this.tcp_data.modifyDigit(1,"2")
+                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                // AppStorage.setOrCreate('fanStatus',true)
+                // this.send('ambient_on');
+              })
+
+            Button('否')
+              .width(100)
+              .height(40)
+              .backgroundColor(!this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
+              .fontColor(!this.ambientSeatOn ? '#000000' : '#999999')
+              .onClick(() => {
+                this.ambientSeatOn = false;
+                this.tcp_data.modifyDigit(1,"1")
+                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                // AppStorage.setOrCreate('fanStatus',false)
+                // this.send('ambient_off');
+              })
           }
         }
-        .columnsTemplate('1fr 1fr')
-        .rowsTemplate('1fr 1fr')
-        .columnsGap(15)
-        .rowsGap(15)
-        .height(180)
+        .width('90%')
+        .padding(15)
+        .backgroundColor('#FAFAFA')
+        .borderRadius(12)
+        .margin({ bottom: 20 })
+
       }
-      .width('90%')
-      .padding(15)
-      .backgroundColor('#FAFAFA')
-      .borderRadius(12)
-
-      //座椅通风及温度设置
-      ColumnSplit()
-        .width("80%")
-        .margin({top:10,bottom:10})
-
-
-      Column() {
-        Text('手动打开座椅通风')
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .margin({ bottom: 15 })
-          .width('100%')
-
-        Flex({ justifyContent: FlexAlign.SpaceAround }) {
-          Button('是')
-            .width(100)
-            .height(40)
-            .backgroundColor(this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
-            .fontColor(this.ambientSeatOn ? '#000000' : '#999999')
-            .onClick(() => {
-              this.ambientSeatOn = true;
-              this.tcp_data.modifyDigit(1,"2")
-              this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
-              // AppStorage.setOrCreate('fanStatus',true)
-              // this.send('ambient_on');
-            })
-
-          Button('否')
-            .width(100)
-            .height(40)
-            .backgroundColor(!this.ambientSeatOn ? '#eca94e' : '#F5F5F5')
-            .fontColor(!this.ambientSeatOn ? '#000000' : '#999999')
-            .onClick(() => {
-              this.ambientSeatOn = false;
-              this.tcp_data.modifyDigit(1,"1")
-              this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
-              // AppStorage.setOrCreate('fanStatus',false)
-              // this.send('ambient_off');
-            })
-        }
-      }
-      .width('90%')
-      .padding(15)
-      .backgroundColor('#FAFAFA')
-      .borderRadius(12)
-      .margin({ bottom: 20 })
 
     }
     .title(this.buildTitle('座椅调节'))

@@ -70,23 +70,23 @@ export  struct WeatherPage {
           }
           .width('100%')
 
+          Column(){
+            Row({space:50}){
+              Text(`温度: ${this.liveInfo.temperature}°C`)
+                .fontSize(35)
+                .fontWeight(999)
+                .align(Alignment.Center)
+                .margin({left:100})
+            }
+            .alignItems(VerticalAlign.Center)
+            .margin({left:40,bottom:8})
+            .width("90%")
+          }.width("100%")
 
           Column(){
-            Row({space:20}){
-              Image($rawfile("Weather.png"))
-                .height(64)
-                .width(64)
-
-              Text(`温度: ${this.liveInfo.temperature}°C`)
-                .fontSize(32)
-                .fontWeight(52)
-            }
-            .margin({left:20,bottom:8})
-            .width("90%")
-
             Row({ space: 20 }){
               Text(`${this.liveInfo.province}${this.liveInfo.city}`)
-                .fontSize(24)
+                .fontSize(20)
                 .fontColor(Color.Gray)
             }
             .margin({left:20})
@@ -98,15 +98,16 @@ export  struct WeatherPage {
             .width("80%")
             .color('#ff989898')
 
-
           Column(){
             Row({space:10}){
               Image($rawfile("Wind.png"))
                 .width(32)
                 .height(32)
               Text(`风向: ${this.liveInfo.winddirection}${this.liveInfo.windpower+"级"}`)
-                .fontSize(32)
-            }.width("90%")
+                .fontSize("5%")
+                .fontWeight(FontWeight.Bold)
+            }
+            .width("90%")
             .margin({left:20})
 
             Divider()
@@ -119,36 +120,31 @@ export  struct WeatherPage {
                 .width(32)
                 .height(32)
               Text(`湿度: ${this.liveInfo.humidity}`)
-                .fontSize(32)
-            }.width("90%")
+                .fontSize("5%")
+                .fontWeight(FontWeight.Bold)
+            }
+            .width("90%")
             .margin({left:20})
 
             Divider()
               .margin({top:8,bottom:8})
               .width("80%")
               .color('#ff989898')
-
 
             Row({space:10}){
               Image($rawfile("Weather_2.png"))
                 .width(32)
                 .height(32)
-
-
-
               Text(`天气状况: ${this.liveInfo.weather}`)
-                .fontSize(32)
-            }.width("90%")
+                .fontSize("5%")
+                .fontWeight(FontWeight.Bold)
+            }
+            .width("90%")
             .margin({left:20})
 
-            Divider()
-              .margin({top:8,bottom:8})
-              .width("80%")
-              .color('#ff989898')
           }
         }
       }
-
 
     }
     .title(this.buildTitle('当前天气'))

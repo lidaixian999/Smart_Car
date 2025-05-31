@@ -5,33 +5,29 @@ export  struct car_page_item{
       Scroll(){
         Flex({direction:FlexDirection.Row}){
           Flex({direction:FlexDirection.Column}){
-
-            Image($rawfile('Car_colum_show.png'))
+            Image($rawfile('car_status.png'))
               .objectFit(ImageFit.Auto)
-              .height('95%')
+              .height('60%')
               .width("auto")
-
-
             TextClock()
               .format("yyyy年M月d日")
-              .fontSize(30)
+              .fontSize(25)
+              .fontWeight(FontWeight.Medium)
             TextClock()
-              .fontSize(32)
+              .fontSize(25)
               .format("aa hh:mm:ss")
               .dateTimeOptions({ hour: "2-digit" })
-              .fontWeight(24)
-
-
+              .fontWeight(FontWeight.Bold)
           }
           .margin({left:24})
         }
       }
-
-    } .width("30%")
+    }
+    .width("100%")
     .height("95%")
     .mode(NavigationMode.Stack)
     .titleMode(NavigationTitleMode.Mini)
     .hideBackButton(true)
-    .title("车辆状态")
+    .title("车辆状态良好")
   }
 }
