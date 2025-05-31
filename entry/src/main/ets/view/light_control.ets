@@ -128,7 +128,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
                   this.selectedColor ='multi'
                   this.tcp_data.modifyDigit(2,"4")
                   AppStorage.setOrCreate('fenStatus',true)
-                  this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                  this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                   // this.send('ambient_on');
                 })
               Button('否')
@@ -140,7 +140,7 @@ import { BusinessError } from '@kit.BasicServicesKit';
                   this.ambientLightOn = false;
                   this.tcp_data.modifyDigit(2,"0")
                   AppStorage.setOrCreate('fenStatus',false)
-                  this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                  this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                   // this.send('ambient_off');
                 })
             }

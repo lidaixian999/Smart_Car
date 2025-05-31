@@ -109,7 +109,7 @@ export struct SeatItem {
               .onClick(() => {
                 this.ambientSeatOn = true;
                 this.tcp_data.modifyDigit(1,"2")
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                 // AppStorage.setOrCreate('fanStatus',true)
                 // this.send('ambient_on');
               })
@@ -122,7 +122,7 @@ export struct SeatItem {
               .onClick(() => {
                 this.ambientSeatOn = false;
                 this.tcp_data.modifyDigit(1,"1")
-                this.tcpSingleton.Send_data(this.tcp_data.fourDigitString)
+                this.ssapManager.writeProperty(this.tcp_data.fourDigitString)
                 // AppStorage.setOrCreate('fanStatus',false)
                 // this.send('ambient_off');
               })
