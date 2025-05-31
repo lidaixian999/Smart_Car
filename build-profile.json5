@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B068A99CCACC300FAB7A5DE4F7D438801E71B9172C98F264A0D9BCCA174DA039AE1F39687B24290",
-          "profile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.p7b",
+          "storeFile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216.p12",
+          "storePassword": "0000001B8E7C46A9BD8CE1C79D0050BC52F6AA972E02778E3DB3421F539617E1D9E9E8EB5EB0C81E248119",
+          "keyAlias": "216",
+          "keyPassword": "0000001B34E4FF9A225182D2F395C9E9F643F6CDFD7EE7340A4CFBFACD8BD665CAC732F890185969A564E8",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_IFmtV-Yw5AagcNoQeiVu6py1L4GGyQGyN_PXG10Suwk=.p12",
-          "storePassword": "0000001B02E53C7EDACBCE8EB3A28E1CFB8400C87CA5B540EA45D2FDB43B07DD43D3B3C2A930DC2E8768C7"
+          "profile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216Debug (1).p7b",
+          "certpath": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216 (2).cer"
         }
       }
     ],

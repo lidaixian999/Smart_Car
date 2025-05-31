@@ -2,7 +2,7 @@
 export  struct car_page_item{
   build() {
     Navigation() {
-      Scroll(){
+
         Flex({direction:FlexDirection.Row}){
           Flex({direction:FlexDirection.Column}){
             Image($rawfile('car_status.png'))
@@ -21,7 +21,7 @@ export  struct car_page_item{
           }
           .margin({left:24})
         }
-      }
+
     }
     .width("100%")
     .height("95%")

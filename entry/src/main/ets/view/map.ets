@@ -10,7 +10,7 @@ interface LocationCoordinate {
   latitude: number;
   longitude: number;
 }
-
+@Entry
 @Component
 export struct HuaweiMapDemo {
   logTag: string = 'map';
@@ -30,9 +30,9 @@ export struct HuaweiMapDemo {
       let context = getContext(this);
       // ohos.permission.ACCESS_NEARLINK is needed in this example.
       // This HAP will ask user for permission when it's opened in the first time.
-      atManager.requestPermissionsFromUser(context, ['ohos.permission.ACCESS_NEARLINK']);
-
-    } catch (err) {
+      atManager.requestPermissionsFromUser(context, ['ohos.permission.LOCATION']);
+      atManager.requestPermissionsFromUser(context, ['ohos.permission.APPROXIMATELY_LOCATION']);
+      } catch (err) {
       hilog.error(this.domainId, this.logTag,
         `errCode: ${(err as BusinessError).code}, errMessage: ${(err as BusinessError).message}`);
     }
@@ -50,7 +50,9 @@ export struct HuaweiMapDemo {
       myLocationControlsEnabled: true
     };
 
-    // 地图初始化的回调
+    //this.mapOptions =geoLocationManager.getCurrentLocation(request)
+
+   // 地图初始化的回调
     this.callback = async (err, mapController) => {
       if (!err) {
         // 获取地图的控制器类，用来操作地图
@@ -58,64 +60,50 @@ export struct HuaweiMapDemo {
         this.mapEventManager = this.mapController.getEventManager();
         let callback = () => {
           console.info(this.TAG, `on-mapLoad`);
+          // 地图加载完成后获取当前位置并设置为地图中心
+          this.getCurrentLocation();
         }
         this.mapEventManager.on("mapLoad", callback);
+        this.getCurrentLocation
+        // 启用我的位置功能
+        this.mapController.setMyLocationEnabled(true);
+        this.mapController.setMyLocationControlsEnabled(true);
       }
     };
   }
 
-    // 地图初始化的回调
-  //   this.callback = async (err, mapController) => {
-  //     if (!err) {
-  //       // 获取地图的控制器类，用来操作地图
-  //       this.mapController = mapController;
-  //       this.mapEventManager = this.mapController.getEventManager();
-  //       let callback = () => {
-  //         console.info(this.TAG, `on-mapLoad`);
-  //         // 地图加载完成后获取当前位置并设置为地图中心
-  //         // this.getCurrentLocation();
-  //       }
-  //       this.mapEventManager.on("mapLoad", callback);
-  //
-  //       // 启用我的位置功能
-  //       this.mapController.setMyLocationEnabled(true);
-  //       this.mapController.setMyLocationControlsEnabled(true);
-  //     }
-  //   };
-  // }
+  // 获取当前位置并设置为地图中心
+  getCurrentLocation(): void {
+    try {
+      // 创建位置请求参数 - 使用正确的SingleLocationRequest类型
+      let request: geoLocationManager.SingleLocationRequest = {
+        locatingPriority: geoLocationManager.LocatingPriority.PRIORITY_ACCURACY, // 高精度定位
+        locatingTimeoutMs: 10000 // 超时时间10秒
+      };
 
-  // // 获取当前位置并设置为地图中心
-  // getCurrentLocation(): void {
-  //   try {
-  //     // 创建位置请求参数 - 使用正确的SingleLocationRequest类型
-  //     let request: geoLocationManager.SingleLocationRequest = {
-  //       locatingPriority: geoLocationManager.LocatingPriority.PRIORITY_ACCURACY, // 高精度定位
-  //       locatingTimeoutMs: 10000 // 超时时间10秒
-  //     };
-  //
-  //     // 获取当前位置
-  //     geoLocationManager.getCurrentLocation(request)
-  //       .then((location: geoLocationManager.Location) => {
-  //         console.info(this.TAG, `获取位置成功: ${JSON.stringify(location)}`);
-  //
-  //         // 如果地图控制器存在，则将地图中心设置为当前位置
-  //         if (this.mapController) {
-  //           let currentLocation: LocationCoordinate = {
-  //             latitude: location.latitude,
-  //             longitude: location.longitude
-  //           };
-  //
-  //           // 设置地图中心为当前位置
-  //           this.mapController.moveCamera({
-  //             target: currentLocation,
-  //             zoom: 15 // 设置更高的缩放级别以便更清晰地查看当前位置
-  //           });
-  //         }
-  //       })
-  //   } catch (error) {
-  //     console.error(this.TAG, `获取位置异常: ${error}`);
-  //   }
-  // }
+      // 获取当前位置
+      geoLocationManager.getCurrentLocation(request)
+        .then((location: geoLocationManager.Location) => {
+          console.info(this.TAG, `获取位置成功: ${JSON.stringify(location)}`);
+
+          // 如果地图控制器存在，则将地图中心设置为当前位置
+          if (this.mapController) {
+            let currentLocation: LocationCoordinate = {
+              latitude: location.latitude,
+              longitude: location.longitude
+            };
+
+            // 设置地图中心为当前位置
+            this.mapController.moveCamera({
+              target: currentLocation,
+              zoom: 15 // 设置更高的缩放级别以便更清晰地查看当前位置
+            });
+          }
+        })
+    } catch (error) {
+      console.error(this.TAG, `获取位置异常: ${error}`);
+    }
+  }
 
   // 页面每次显示时触发一次，包括路由过程、应用进入前台等场景，仅@Entry装饰的自定义组件生效
   onPageShow(): void {

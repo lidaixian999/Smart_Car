@@ -14,48 +14,8 @@ import { abilityAccessCtrl, bundleManager, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
-async function checkPermissionGrant(permission: Permissions): Promise<abilityAccessCtrl.GrantStatus> {
-  let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
-  let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
 
 
-  // 获取应用程序的accessTokenID。
-  let tokenId: number = 0;
-  try {
-    let bundleInfo: bundleManager.BundleInfo = await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
-    let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
-    tokenId = appInfo.accessTokenId;
-  } catch (error) {
-    const err: BusinessError = error as BusinessError;
-    console.error(`Failed to get bundle info for self. Code is ${err.code}, message is ${err.message}`);
-  }
-
-
-  // 校验应用是否被授予权限。
-  try {
-    grantStatus = await atManager.checkAccessToken(tokenId, permission);
-  } catch (error) {
-    const err: BusinessError = error as BusinessError;
-    console.error(`Failed to check access token. Code is ${err.code}, message is ${err.message}`);
-  }
-
-
-  return grantStatus;
-}
-
-
-async function checkPermissions(): Promise<void> {
-  let grantStatus1: boolean = await checkPermissionGrant('ohos.permission.LOCATION') === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;// 获取精确定位权限状态。
-  let grantStatus2: boolean = await checkPermissionGrant('ohos.permission.APPROXIMATELY_LOCATION') === abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED;// 获取模糊定位权限状态。
-  // 精确定位权限只能跟模糊定位权限一起申请，或者已经有模糊定位权限才能申请精确定位权限。
-  if (grantStatus2 && !grantStatus1) {
-    // 申请精确定位权限。
-  } else if (!grantStatus1 && !grantStatus2) {
-    // 申请模糊定位权限与精确定位权限或单独申请模糊定位权限。
-  } else {
-    // 已经授权，可以继续访问目标操作。
-  }
-}
 
 
 @Entry
@@ -121,14 +81,14 @@ aboutToAppear(): void {
       //currentIndex为状态变量保证页签与图标实时刷新
       Image(this.currentIndex === targetIndex ? selectedIcon : unselectIcon)
         .width(24)
-        .height(20)
+        .height(24)
       Text(title)//字体
         .fontFamily('HarmonyHeiTi-Medium')
         .fontSize(10)
         .fontColor(this.currentIndex === targetIndex ? '#0A59F7' : 'rgba(0,0,0,0.60)')
         .textAlign(TextAlign.Center)
         .lineHeight(14)
-        .fontWeight(500)
+        .fontWeight(300)
     }
     .width('100%')
     .height('100%')
@@ -151,13 +111,14 @@ aboutToAppear(): void {
           // Divider().width(10).height("100%").margin({top:20,bottom:20}).vertical(true)
           Column() {
             Navigation(this.pageInfos) {
-              List({ space: 12 }) {
-                car_page_item();
+              Scroll(){
+                List({ space: 12 }) {
+                  car_page_item();
                   ListItem() {
                     Text("车辆信息")
                       .width("100%")
                       .height(72)
-                      //.backgroundColor('#eca94e')
+                        //.backgroundColor('#eca94e')
                       .backgroundColor(this.selectedButton === 'carInformation' ? '#eca94e' : '#FAF1E5')
                       .borderRadius(24)
                       .fontSize(16)
@@ -175,73 +136,73 @@ aboutToAppear(): void {
                       this.pageInfos.pushPath({ name: "NavDestinationTitle1" })
                     }
                   })
-                ListItem() {
-                  Text("灯光控制")
-                    .width("100%")
-                    .height(72)
-                    .backgroundColor(this.selectedButton === 'light' ? '#eca94e' : '#FAF1E5')
-                    .borderRadius(24)
-                    .fontSize(16)
-                    .fontWeight(FontWeight.Bold)
-                    .textAlign(TextAlign.Center)
-                }.onClick(() => {
-                  if(this.selectedButton === 'light'){
-                    this.selectedButton = 'None'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({name:"NoneTitle"})
-                  }
-                  else {
-                    this.selectedButton = 'light'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({ name: "NavDestinationTitle2" })
-                  }
-                })
+                  ListItem() {
+                    Text("灯光控制")
+                      .width("100%")
+                      .height(72)
+                      .backgroundColor(this.selectedButton === 'light' ? '#eca94e' : '#FAF1E5')
+                      .borderRadius(24)
+                      .fontSize(16)
+                      .fontWeight(FontWeight.Bold)
+                      .textAlign(TextAlign.Center)
+                  }.onClick(() => {
+                    if(this.selectedButton === 'light'){
+                      this.selectedButton = 'None'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({name:"NoneTitle"})
+                    }
+                    else {
+                      this.selectedButton = 'light'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({ name: "NavDestinationTitle2" })
+                    }
+                  })
 
-                ListItem() {
-                  Text("座椅调节")
-                    .width("100%")
-                    .height(72)
-                    .backgroundColor(this.selectedButton === 'chair' ? '#eca94e' : '#FAF1E5')
-                    .borderRadius(24)
-                    .fontSize(16)
-                    .fontWeight(FontWeight.Bold)
-                    .textAlign(TextAlign.Center)
-                }.onClick(() => {
-                  if(this.selectedButton === 'chair'){
-                    this.selectedButton = 'None'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({name:"NoneTitle"})
-                  }
-                  else {
-                    this.selectedButton = 'chair'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({ name: "NavDestinationTitle3" })
-                  }
-                })
+                  ListItem() {
+                    Text("座椅调节")
+                      .width("100%")
+                      .height(72)
+                      .backgroundColor(this.selectedButton === 'chair' ? '#eca94e' : '#FAF1E5')
+                      .borderRadius(24)
+                      .fontSize(16)
+                      .fontWeight(FontWeight.Bold)
+                      .textAlign(TextAlign.Center)
+                  }.onClick(() => {
+                    if(this.selectedButton === 'chair'){
+                      this.selectedButton = 'None'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({name:"NoneTitle"})
+                    }
+                    else {
+                      this.selectedButton = 'chair'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({ name: "NavDestinationTitle3" })
+                    }
+                  })
 
-                ListItem() {
-                  Text("当前天气")
-                    .width("100%")
-                    .height(72)
-                    .backgroundColor(this.selectedButton === 'weather' ? '#eca94e' : '#FAF1E5')
-                    .borderRadius(24)
-                    .fontSize(16)
-                    .fontWeight(FontWeight.Bold)
-                    .textAlign(TextAlign.Center)
-                }.onClick(() => {
-                  if(this.selectedButton === 'weather'){
-                    this.selectedButton = 'None'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({name:"NoneTitle"})
-                  }
-                  else {
-                    this.selectedButton = 'weather'
-                    this.pageInfos.pop()
-                    this.pageInfos.pushPath({ name: "NavDestinationTitle5" })
-                  }
-                })
+                  ListItem() {
+                    Text("当前天气")
+                      .width("100%")
+                      .height(72)
+                      .backgroundColor(this.selectedButton === 'weather' ? '#eca94e' : '#FAF1E5')
+                      .borderRadius(24)
+                      .fontSize(16)
+                      .fontWeight(FontWeight.Bold)
+                      .textAlign(TextAlign.Center)
+                  }.onClick(() => {
+                    if(this.selectedButton === 'weather'){
+                      this.selectedButton = 'None'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({name:"NoneTitle"})
+                    }
+                    else {
+                      this.selectedButton = 'weather'
+                      this.pageInfos.pop()
+                      this.pageInfos.pushPath({ name: "NavDestinationTitle5" })
+                    }
+                  })
 
-                ListItem(){
+                  ListItem(){
                     Text("自动化设置")
                       .width("100%")
                       .height(72)
@@ -265,9 +226,11 @@ aboutToAppear(): void {
                   })
 
 
+                }
+                .width("90%")
+                .margin({ top: 12 })
               }
-              .width("90%")
-              .margin({ top: 12 })
+
             }
             .title("管理")
             .mode(NavigationMode.Split)
