@@ -5,7 +5,7 @@ import {LightControl} from '../view/light_control'
 import {Nonepage} from '../view/NonePage'
 import {carInformationItem} from  '../view/carInformation'
 import {AutoSet} from '../view/AutoSet'
-import {HuaweiMapDemo} from '../view/map'
+import {HuaweiMapDemo} from './map'
 import {Setting_Page} from '../pages/Setting_page'
 import {WeatherPage} from '../view/Weather_Page'
 import { SsapManager } from '../model/SsapManager';
@@ -13,7 +13,7 @@ import GlobalData from '../model/Tcp_data'
 import { abilityAccessCtrl, bundleManager, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import {Ai_page} from '../view/Aipage'
+import {Ai_page} from './Aipage'
 
 
 
