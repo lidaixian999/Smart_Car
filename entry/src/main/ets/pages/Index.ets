@@ -252,7 +252,6 @@ aboutToAppear(): void {
       .tabBar(this.tabBarBuilder('车辆', 0, $rawfile('up_car.png'), $rawfile('un_car.png')))
       TabContent() {
 
-
         HuaweiMapDemo()
 
       }
@@ -262,10 +261,19 @@ aboutToAppear(): void {
 
         Setting_Page()
 
-
       }
       .backgroundColor('#e2eeeeee')
       .tabBar(this.tabBarBuilder("设置", 2, $rawfile('up_control.png'), $rawfile('un_control.png')))
+
+      TabContent() {
+
+        Setting_Page()
+
+      }
+      .backgroundColor('#e2eeeeee')
+      .tabBar(this.tabBarBuilder("设置", 3, $rawfile('up_control.png'), $rawfile('un_control.png')))
+
+
     }
     .onChange((index: number) => {
       // currentIndex控制TabContent显示页签
