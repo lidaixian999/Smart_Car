@@ -142,7 +142,7 @@ export struct Setting_Page{
         Row() {
           Text("设置中心")
             .fontSize(32)
-            .fontWeight(32)
+            .fontWeight(FontWeight.Bold)
             .margin({ left: 32, top: 18, bottom: 14 })
 
         }
