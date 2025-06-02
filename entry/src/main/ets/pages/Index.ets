@@ -98,6 +98,9 @@ aboutToAppear(): void {
     .onClick(() => {
       //索引从0开始计算。这里是点击后控制器改变页签
       this.currentIndex = targetIndex;
+      this.pageInfos.pop()
+      this.selectedButton = 'None'
+      this.pageInfos.pushPath({name:"NoneTitle"})
       this.tabsController.changeIndex(targetIndex);
     })
   }

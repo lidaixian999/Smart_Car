@@ -33,16 +33,19 @@ export class AICommandParser {
       case 'HEADLIGHT_OFF':
         return { type: 'headlight', action: 'off', position: 0, digit: '0' };
 
-    // 座椅通风控制（位置1）
+    // 座椅通风控制（位置1）手动强制打开风扇
       case 'SEAT_VENT_ON':
+
         return { type: 'seat_vent', action: 'on', position: 1, digit: '2' };
       case 'SEAT_VENT_OFF':
         return { type: 'seat_vent', action: 'off', position: 1, digit: '1' };
 
     // 氛围灯控制（位置2）
       case 'AMBIENT_OFF':
+        AppStorage.setOrCreate('fenStatus',false)
         return { type: 'ambient', action: 'off', position: 2, digit: '0' };
       case 'AMBIENT_MIX':
+        AppStorage.setOrCreate('fenStatus',true)
         return { type: 'ambient', action: 'mix', position: 2, digit: '4' };
       case 'AMBIENT_RED':
         return { type: 'ambient', action: 'red', position: 2, digit: '1' };

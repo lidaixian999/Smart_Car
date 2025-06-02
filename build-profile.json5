@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216.p12",
-          "storePassword": "0000001B8E7C46A9BD8CE1C79D0050BC52F6AA972E02778E3DB3421F539617E1D9E9E8EB5EB0C81E248119",
+          "storeFile": "C:/Users/28019/Desktop/0606/216.p12",
+          "storePassword": "0000001BAC18FF9397A25DEB7076EBD217BF98319023E53F482F2484E8124835F207D36D512C0BBF2ECB8E",
           "keyAlias": "216",
-          "keyPassword": "0000001B34E4FF9A225182D2F395C9E9F643F6CDFD7EE7340A4CFBFACD8BD665CAC732F890185969A564E8",
+          "keyPassword": "0000001BC37BF227BA3995C2461F056C32990D26AF12899D593AC40DB99CF197F37B40B30709394B945415",
           "signAlg": "SHA256withECDSA",
-          "profile": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216Debug (1).p7b",
-          "certpath": "C:/Users/97049/DevEcoStudioProjects/小车密钥/216 (2).cer"
+          "profile": "C:/Users/28019/Desktop/0606/216Debug (1).p7b",
+          "certpath": "C:/Users/28019/Desktop/0606/216 (2).cer"
         }
       }
     ],
