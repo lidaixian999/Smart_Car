@@ -13,7 +13,7 @@ import GlobalData from '../model/Tcp_data'
 import { abilityAccessCtrl, bundleManager, Permissions } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-
+import {Ai_page} from '../view/Aipage'
 
 
 
@@ -267,11 +267,11 @@ aboutToAppear(): void {
 
       TabContent() {
 
-        Setting_Page()
+        Ai_page()
 
       }
       .backgroundColor('#e2eeeeee')
-      .tabBar(this.tabBarBuilder("设置", 3, $rawfile('up_control.png'), $rawfile('un_control.png')))
+      .tabBar(this.tabBarBuilder("AI", 3, $rawfile('AI.png'), $rawfile('un_ai.png')))
 
 
     }

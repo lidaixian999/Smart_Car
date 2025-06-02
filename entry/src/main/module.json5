@@ -86,9 +86,17 @@
             "EntryFormAbility"
           ],
           "when": "always",
-        },
+        }},
+      {
+        "name" : "ohos.permission.MICROPHONE",
+        "reason": "$string:app_name",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when":"inuse"
+        }
       }
     ]
-
   }
 }
