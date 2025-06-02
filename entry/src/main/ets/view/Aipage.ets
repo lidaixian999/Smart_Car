@@ -7,6 +7,10 @@ import { promptAction } from '@kit.ArkUI';
 import { sendAIRequest } from '../model/Ai_online'
 import {AIRequestExample } from '../model/Ai_online'
 import {ChatResponse} from '../model/Ai_online'
+import { SmartCommandExecutor,ExecutionResult } from '../model/SmartCommandExecutor';
+import GlobalData from '../model/Tcp_data';
+import { SsapManager } from '../model/SsapManager';
+import { AICommandParser, CommandAction } from '../model/AICommandParser';
 const TAG: string = 'ChatPage';
 let asrEngine: speechRecognizer.SpeechRecognitionEngine;
 
@@ -41,10 +45,15 @@ export struct Ai_page {
   @State private createCount: number = 0; // 创建引擎计数
   @State private sessionId: string = "123456"; // 语音识别 sessionId
 
+
+  private tcp_data = GlobalData.getInstance()
+  private ssapManager: SsapManager = SsapManager.getInstance();
+
   private listScroller: Scroller = new Scroller();
   private recordingTimer: number = -1;
   private waveAnimationTimer: number = -1;
   private mAudioCapturer: ICapturerInterface = new AudioCapturer();
+  private smartCommandExecutor: SmartCommandExecutor = new SmartCommandExecutor(this.tcp_data, this.ssapManager);
 
   build() {
     Stack() {
@@ -213,7 +222,7 @@ export struct Ai_page {
           .onSubmit(() => {
             this.sendTextMessage();
           })
-          // 添加键盘避让相关配置
+            // 添加键盘避让相关配置
           .onFocus(() => {
             // 当输入框获得焦点时，自动滚动到底部
             setTimeout(() => {
@@ -869,14 +878,35 @@ export struct Ai_page {
   }
 
   // 发送AI请求
-  private sendAIMessage(content: string) {
+  private async sendAIMessage(content: string) {
     this.isAiTyping = true;
     this.scrollToBottom();
 
-    sendAIRequest(content, (response: ChatResponse) => {
+    try {
+      const response = await new Promise<ChatResponse>((resolve, reject) => {
+        sendAIRequest(content, (response: ChatResponse) => {
+          resolve(response);
+        });
+      });
+
       this.isAiTyping = false;
       this.addMessage(response.content, false);
-    });
+
+      // 解析并执行AI回复中的指令
+      const executionResult: ExecutionResult = await this.smartCommandExecutor.executeFromAIResponse(response.content);
+
+      if (executionResult.executed && executionResult.confirmMessage) {
+        // 如果执行了指令，添加确认消息
+        setTimeout(() => {
+          this.addMessage(executionResult.confirmMessage!, false);
+        }, 500);
+      }
+
+    } catch (error) {
+      this.isAiTyping = false;
+      console.error('AI请求失败:', error);
+      this.addMessage('抱歉，AI服务暂时不可用，请稍后重试。', false);
+    }
   }
 
   // 滚动到底部

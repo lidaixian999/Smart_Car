@@ -8,10 +8,57 @@ export struct SeatItem {
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
   @StorageLink ("ambientSeatOn") ambientSeatOn: boolean = false;
-  @StorageLink ("Select_Seat") Select_seat:string = 'close'
-  @StorageLink ("Select_Mod") selected_Mod: string = '1'; // 新增颜色选择状态
+  @StorageLink ("Select_Mod") selected_Mod: string = '1'; // 1代表正常，2代表小憩，3代表躺平
 
+  aboutToAppear(): void {
+    // 根据tcp_data同步状态变量
+    this.syncStateFromTcpData();
+  }
 
+  // 添加状态同步方法
+  private syncStateFromTcpData(): void {
+    const seatVentilationStatus = this.tcp_data.fourDigitString.charAt(1); // 第1位控制座椅通风
+    const seatModeStatus = this.tcp_data.fourDigitString.charAt(3); // 第3位控制座椅模式
+    
+    // 同步座椅通风状态
+    switch (seatVentilationStatus) {
+      case '1':
+        this.ambientSeatOn = false;
+        AppStorage.setOrCreate('ambientSeatOn', false);
+        break;
+      case '2':
+        this.ambientSeatOn = true;
+        AppStorage.setOrCreate('ambientSeatOn', true);
+        break;
+      default:
+        console.log('未知的座椅通风状态:', seatVentilationStatus);
+        break;
+    }
+    
+    // 同步座椅模式状态
+    switch (seatModeStatus) {
+      case '0':
+        // 正常模式
+        this.selected_Mod = '1';
+        AppStorage.setOrCreate('Select_Mod', '1');
+        break;
+      case '2':
+        // 躺平模式
+        this.selected_Mod = '3';
+        AppStorage.setOrCreate('Select_Mod', '3');
+        break;
+      case '3':
+        // 小憩模式
+        this.selected_Mod = '2';
+        AppStorage.setOrCreate('Select_Mod', '2');
+        break;
+      default:
+        console.log('未知的座椅模式状态:', seatModeStatus);
+        break;
+    }
+    
+    console.log('座椅状态同步完成 - ambientSeatOn:', this.ambientSeatOn, 'selected_Mod:', this.selected_Mod);
+  }
 
   @Builder
   buildTitle(title: string){

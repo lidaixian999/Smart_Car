@@ -17,6 +17,7 @@ class GlobalData {
       arr[index] = digit;
       this.fourDigitString = arr.join('');
     }
+    console.log("tcp_data = ",this.fourDigitString)
   }
 }
 

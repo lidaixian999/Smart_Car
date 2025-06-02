@@ -13,8 +13,57 @@ import { BusinessError } from '@kit.BasicServicesKit';
   @StorageLink('selectedColor') selectedColor: string = 'white';
   @Consume('pageInfos') pageInfos: NavPathStack;
 
+  // 添加状态同步方法
+private syncStateFromTcpData(): void {
+  const lightStatus = this.tcp_data.fourDigitString.charAt(2);
+  
+  switch (lightStatus) {
+    case '0':
+      // 氛围灯关闭
+      this.ambientLightOn = false;
+      AppStorage.setOrCreate('ambientLightOn', false);
+      AppStorage.setOrCreate('fenStatus', false);
+      break;
+    case '1':
+      // 氛围灯开启 - 红色
+      this.ambientLightOn = true;
+      this.selectedColor = 'red';
+      AppStorage.setOrCreate('ambientLightOn', true);
+      AppStorage.setOrCreate('selectedColor', 'red');
+      AppStorage.setOrCreate('fenStatus', true);
+      break;
+    case '2':
+      // 氛围灯开启 - 蓝色
+      this.ambientLightOn = true;
+      this.selectedColor = 'blue';
+      AppStorage.setOrCreate('ambientLightOn', true);
+      AppStorage.setOrCreate('selectedColor', 'blue');
+      AppStorage.setOrCreate('fenStatus', true);
+      break;
+    case '3':
+      // 氛围灯开启 - 绿色
+      this.ambientLightOn = true;
+      this.selectedColor = 'green';
+      AppStorage.setOrCreate('ambientLightOn', true);
+      AppStorage.setOrCreate('selectedColor', 'green');
+      AppStorage.setOrCreate('fenStatus', true);
+      break;
+    case '4':
+      // 氛围灯开启 - 七彩灯
+      this.ambientLightOn = true;
+      this.selectedColor = 'multi';
+      AppStorage.setOrCreate('ambientLightOn', true);
+      AppStorage.setOrCreate('selectedColor', 'multi');
+      AppStorage.setOrCreate('fenStatus', true);
+      break;
+    default:
+      console.log('未知的灯光状态:', lightStatus);
+      break;
+  }
+  console.log('状态同步完成 - ambientLightOn:', this.ambientLightOn, 'selectedColor:', this.selectedColor);
+}
   aboutToAppear(): void {
-
+    this.syncStateFromTcpData();
   }
 
   @Builder

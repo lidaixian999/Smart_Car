@@ -16,7 +16,6 @@ export struct AutoSet {
 
   progress: number = 100; // 进度值，范围 0 - 100
   @Consume('pageInfos') pageInfos: NavPathStack;
-
   @StorageLink ("Auto_items")  autoItems: Auto_item1[] = [
   { name: "自动车前大灯", status: true },
   { name: "自动座椅通风", status: true },
@@ -63,6 +62,42 @@ export struct AutoSet {
       .margin({top:5})
   } .title('自动化设置')
   }
+
+  aboutToAppear(): void {
+    // 根据tcp_data同步自动化设置状态
+    this.syncAutoItemsFromTcpData();
+  }
+
+  // 添加状态同步方法
+  // 修复状态同步方法
+  private syncAutoItemsFromTcpData(): void {
+    const headlightStatus = this.tcp_data.fourDigitString.charAt(0); // 第0位控制自动车前大灯
+    const seatVentilationStatus = this.tcp_data.fourDigitString.charAt(1); // 第1位控制自动座椅通风
+    
+    // 更新autoItems数组中的状态
+    this.autoItems = this.autoItems.map(item => {
+      if (item.name === "自动车前大灯") {
+        // '0'表示自动模式开启，'1'表示手动模式（自动关闭）
+        const newStatus = headlightStatus === '0';
+        // 使用显式对象创建替代展开语法
+        return { name: item.name, status: newStatus };
+      } else if (item.name === "自动座椅通风") {
+        // '0'表示自动模式开启，'1'或'2'表示手动模式（自动关闭）
+        const newStatus = seatVentilationStatus === '0';
+        // 使用显式对象创建替代展开语法
+        return { name: item.name, status: newStatus };
+      }
+      return item;
+    });
+    
+    // 同步到AppStorage
+    AppStorage.setOrCreate('Auto_items', this.autoItems);
+    
+    console.log('自动化设置状态同步完成:', {
+      headlightAuto: headlightStatus === '0',
+      seatVentilationAuto: seatVentilationStatus === '0'
+    });
+  }
 }
 
 @Component
@@ -97,7 +132,7 @@ struct Auto_list_items{
              promptAction.showToast(this.BOnSt)
              if(this.Auto.name == "自动车前大灯"){
                this.tcp_data.modifyDigit(0,"0")
-             }else if(this.Auto.name == "自动座椅通风"){
+             } else if(this.Auto.name == "自动座椅通风"){
                this.tcp_data.modifyDigit(1,"0")
                AppStorage.setOrCreate('ambientSeatOn', true);
                AppStorage.setOrCreate('fanStatus',true)
@@ -107,10 +142,9 @@ struct Auto_list_items{
            } else {
              promptAction.showToast(this.BOffSt)
              if(this.Auto.name == "自动车前大灯"){
-
                this.tcp_data.modifyDigit(0,"1")
-             }else if(this.Auto.name == "自动座椅通风"){
-
+             }
+             else if(this.Auto.name == "自动座椅通风"){
                this.tcp_data.modifyDigit(1,"1")
                AppStorage.setOrCreate('ambientSeatOn', false);
                AppStorage.setOrCreate('fanStatus',false)
