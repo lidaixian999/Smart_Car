@@ -25,7 +25,9 @@ function stringToArrayBuffer(str: string): ArrayBuffer {
   return uint8Array.buffer;
 }
 
-
+let onPropertyChange:(data: ssap.Property) => void = (data: ssap.Property) => {
+  console.info('data:'+ JSON.stringify(data));
+}
 /**
  * SSAP管理器单例类
  * 负责设备扫描、连接、属性读写等功能
@@ -42,7 +44,7 @@ export class SsapManager {
   // 设备配置
   private readonly serviceUuid: string = '37BEA880-FC70-11EA-B720-000000002222';
   private readonly propertyUuid: string = '37BEA880-FC70-11EA-B720-000000002323';
-  private readonly deviceAddress: string = 'F4:A5:BC:73:79:09';
+  private readonly deviceAddress: string = '90:88:E5:75:9C:DA';
 
   private property: ssap.Property;
 
@@ -59,9 +61,10 @@ export class SsapManager {
       propertyUuid: this.propertyUuid,
       value: stringToArrayBuffer("hello")
     };
-    this.startScan()
     this.connectDevice_second()
+
   }
+
 
   /**
    * 获取单例实例
@@ -72,6 +75,7 @@ export class SsapManager {
     }
     return SsapManager.instance;
   }
+
 
   /**
    * 字符串转ArrayBuffer（实例方法）
@@ -188,9 +192,14 @@ export class SsapManager {
       scan.on('deviceFound', (data: Array<scan.ScanResults>) => {
         hilog.info(this.domainId, this.logTag, `Device found: ${data.length} devices`);
 
+        data.forEach((data, index) => {
+          console.log(`发现设备 ${data[index].deviceName + 1}: 地址 = ${data[index].address}`);
+          hilog.info(this.domainId, this.logTag, `发现设备 ${index + 1}: 地址 = ${data[index].address}`);
+          //
+        });
         // 添加新发现的设备到结果列表
         this.scanResults.push(...data);
-
+        console.log(data.toString())
         // 通知所有注册的回调
         this.callbacks.forEach(callback => {
           try {
@@ -222,21 +231,37 @@ export class SsapManager {
     }
   }
 
+  /**
+   * 初始化扫描功能
+   */
+  private async initializeScanning(): Promise<void> {
+    try {
+      // 注册设备发现回调
+      this.registerDeviceFoundCallback();
+
+      // 开始扫描
+      await this.startScan();
+
+      hilog.info(this.domainId, this.logTag, 'SsapManager initialized and scanning started');
+    } catch (error) {
+      hilog.error(this.domainId, this.logTag, `Failed to initialize scanning: ${error}`);
+    }
+  }
+
   // 连接设备
   public connectDevice(address: string): void {
+
     hilog.debug(this.domainId, this.logTag, 'connectDevice()');
     try {
       this.client = ssap.createClient(address);
       this.services = [];
       this.registerConnectionStateChangeCallback();
       this.registerPropertyChangeCallback();
-
+      this.client.on('propertyChange', onPropertyChange);
       this.client.connect().then(() => {
         this.isConnected = true;
         hilog.info(this.domainId, this.logTag, 'connect success');
-        setTimeout(() => {
-          this.setPropertyNotification();
-        }, 500);
+
       });
     } catch (err) {
       hilog.error(this.domainId, this.logTag,
@@ -254,21 +279,29 @@ export class SsapManager {
       try {
         this.client = ssap.createClient(this.deviceAddress);
         this.services = [];
+
         this.registerConnectionStateChangeCallback();
         this.registerPropertyChangeCallback();
 
         this.client.connect().then(() => {
+
           this.isConnected = true;
           hilog.info(this.domainId, this.logTag, 'Device connected successfully');
+
           setTimeout(() => {
             this.setPropertyNotification();
             resolve();
-          }, 500);
+          } , 500);
+
+
         }).catch((err: BusinessError) => {
+
           const errorMsg = `Connect failed - Code: ${err.code}, Message: ${err.message}`;
           hilog.error(this.domainId, this.logTag, errorMsg);
           reject(new Error(errorMsg));
+
         });
+
       } catch (err) {
         const error = err as BusinessError;
         const errorMsg = `Connect error - Code: ${error.code}, Message: ${error.message}`;
@@ -277,6 +310,8 @@ export class SsapManager {
       }
     });
   }
+
+
   /**
    * 获取服务列表
    */
@@ -449,6 +484,7 @@ export class SsapManager {
   /**
    * 写入属性
    */
+  //todo
   public writeProperty(data: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.client) {
@@ -461,6 +497,9 @@ export class SsapManager {
       hilog.info(this.domainId, this.logTag, 'Writing property...');
       try {
         this.property.value = stringToArrayBuffer(data);
+        this.client.requestMtuSize(128).then(() => {
+          console.info('requestMtuSize success');
+        });
         this.client.writeProperty(this.property, ssap.PropertyWriteType.WRITE_NO_RESPONSE).then(() => {
           hilog.info(this.domainId, this.logTag, 'Property written successfully');
           promptAction.showToast({

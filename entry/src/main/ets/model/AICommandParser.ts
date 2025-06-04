@@ -15,7 +15,7 @@ export class AICommandParser {
     return AICommandParser.instance;
   }
 
-  // 解析AI回复中的指令标识
+  // 解析c
   parseCommand(aiResponse: string): CommandAction | null {
     // 提取指令标识
     const commandMatches = aiResponse.match(/\[([A-Z_]+)\]/g);
