@@ -307,5 +307,3 @@ UI操作 → GlobalData → SsapManager → NearLink通信 → 车载设备
 - 邮箱: mingjieli2004@163.com
 
 ---
-
-*最后更新时间: 2024年12月*
