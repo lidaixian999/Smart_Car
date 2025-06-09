@@ -503,7 +503,7 @@ export class SsapManager {
         this.client.writeProperty(this.property, ssap.PropertyWriteType.WRITE_NO_RESPONSE).then(() => {
           hilog.info(this.domainId, this.logTag, 'Property written successfully');
           promptAction.showToast({
-            message: `write property`,
+            message: `操作成功`,
             duration: 2000
           });
           resolve();

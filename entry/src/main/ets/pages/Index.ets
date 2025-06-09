@@ -120,7 +120,7 @@ aboutToAppear(): void {
                   ListItem() {
                     Text("车辆信息")
                       .width("100%")
-                      .height(72)
+                      .height(73)
                         //.backgroundColor('#eca94e')
                       .backgroundColor(this.selectedButton === 'carInformation' ? '#eca94e' : '#FAF1E5')
                       .borderRadius(24)
