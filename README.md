@@ -303,7 +303,7 @@ UI操作 → GlobalData → SsapManager → NearLink通信 → 车载设备
 
 ## 联系方式
 
-- 项目维护者: 216团队
+- 项目维护者: 216团队——深圳技术大学
 - 邮箱: mingjieli2004@163.com
 
 ---
