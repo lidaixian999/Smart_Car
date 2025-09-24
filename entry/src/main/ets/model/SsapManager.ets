@@ -46,7 +46,7 @@ export class SsapManager {
   private readonly serviceUuid: string = '37BEA880-FC70-11EA-B720-000000002222';
   private readonly propertyUuid: string = '37BEA880-FC70-11EA-B720-000000002323';
   private readonly deviceAddress: string = 'EE:E8:35:DF:1C:9C';
-
+  //可选这里初始化
   private property: ssap.Property;
 
   // 日志配置
