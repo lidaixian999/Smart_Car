@@ -28,6 +28,7 @@ function stringToArrayBuffer(str: string): ArrayBuffer {
 let onPropertyChange:(data: ssap.Property) => void = (data: ssap.Property) => {
   console.info('data:'+ JSON.stringify(data));
 }
+
 /**
  * SSAP管理器单例类
  * 负责设备扫描、连接、属性读写等功能
@@ -192,10 +193,9 @@ export class SsapManager {
       scan.on('deviceFound', (data: Array<scan.ScanResults>) => {
         hilog.info(this.domainId, this.logTag, `Device found: ${data.length} devices`);
 
-        data.forEach((data, index) => {
-          console.log(`发现设备 ${data[index].deviceName + 1}: 地址 = ${data[index].address}`);
-          hilog.info(this.domainId, this.logTag, `发现设备 ${index + 1}: 地址 = ${data[index].address}`);
-          //
+        data.forEach((device, index) => {
+          console.log(`发现设备 ${index + 1}: 名称 = ${device.deviceName || '未知设备'}, 地址 = ${device.address}`);
+          hilog.info(this.domainId, this.logTag, `发现设备 ${index + 1}: 名称 = ${device.deviceName || '未知设备'}, 地址 = ${device.address}`);
         });
         // 添加新发现的设备到结果列表
         this.scanResults.push(...data);
@@ -484,7 +484,6 @@ export class SsapManager {
   /**
    * 写入属性
    */
-  //todo
   public writeProperty(data: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.client) {

@@ -43,7 +43,7 @@ export function get_wethear( liveInfo: LiveInfo) {
           liveInfo.reporttime = (obj as object)?.["reporttime"];
           liveInfo.temperature_float = (obj as object)?.["temperature_float"];
           liveInfo.humidity_float = (obj as object)?.["humidity_float"];
-          //todo 照着上两行，一样的方法去给liveIfon赋值
+
         }
 
         // let obj = data.result;

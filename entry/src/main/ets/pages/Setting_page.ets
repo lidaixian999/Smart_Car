@@ -1,8 +1,9 @@
-import { SsapManager } from '../model/SsapManager';
+import { SsapManager, ScanResultCallback } from '../model/SsapManager';
 import GlobalData from '../model/Tcp_data'
 import {Auto_item1} from '../viewmodel/Auto_item'
 import {EmergencyContact} from '../viewmodel/Auto_item'
 import { promptAction } from '@kit.ArkUI';
+import { scan } from '@kit.NearLinkKit';
 
 @CustomDialog
 struct EmergencyContactDialog {
@@ -104,6 +105,303 @@ struct EmergencyContactDialog {
 
 }
 
+@CustomDialog
+struct StarLinkDialog {
+  controller: CustomDialogController = new CustomDialogController({
+    builder: StarLinkDialog({}),
+  })
+
+  @State searchText: string = ''
+  @State isScanning: boolean = false
+  @State scanResults: Array<scan.ScanResults> = []
+  @State filteredResults: Array<scan.ScanResults> = []
+  @State selectedDevice: scan.ScanResults | null = null
+  @State isConnecting: boolean = false
+
+  private ssapManager = SsapManager.getInstance()
+  private scanCallback: ScanResultCallback = {
+    onDeviceFound: (results: Array<scan.ScanResults>) => {
+      this.scanResults = [...results]
+      this.filterDevices()
+    },
+    onConnectionStateChanged: (state) => {
+      console.log('Connection state changed:', state)
+    },
+    onPropertyChanged: (property) => {
+      console.log('Property changed:', property)
+    }
+  }
+
+  constructor(controller: CustomDialogController) {
+    super()
+    this.controller = controller
+  }
+
+  build() {
+    Column({ space: 20 }) {
+      // 标题
+      Text('星闪设备连接')
+        .fontSize(24)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 20 })
+
+      // 搜索框
+      Row({ space: 10 }) {
+        TextInput({ placeholder: '输入设备名称（可选）' })
+          .width('60%')
+          .height(40)
+          .onChange((value: string) => {
+            this.searchText = value
+            this.filterDevices()
+          })
+
+        Button('清除')
+          .width('15%')
+          .height(40)
+          .backgroundColor('#f0f0f0')
+          .fontColor(Color.Black)
+          .onClick(() => {
+            this.searchText = ''
+            this.filterDevices()
+          })
+
+        Button(this.isScanning ? '停止扫描' : '开始扫描')
+          .width('20%')
+          .height(40)
+          .backgroundColor(this.isScanning ? '#ff6b6b' : '#eca94e')
+          .onClick(() => {
+            if (this.isScanning) {
+              this.stopScan()
+            } else {
+              this.startScan()
+            }
+          })
+      }
+      .width('90%')
+
+      // 设备列表
+      if (this.filteredResults.length > 0) {
+        Text(`发现的设备 (${this.filteredResults.length}个):`)
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .alignSelf(ItemAlign.Start)
+          .margin({ left: 20 })
+
+        List() {
+          ForEach(this.filteredResults, (device: scan.ScanResults, index: number) => {
+            ListItem() {
+              Row({ space: 15 }) {
+                Column({ space: 5 }) {
+                  Text(device.deviceName || '未知设备')
+                    .fontSize(16)
+                    .fontWeight(FontWeight.Medium)
+                    .alignSelf(ItemAlign.Start)
+                  
+                  Text(`地址: ${device.address}`)
+                    .fontSize(12)
+                    .fontColor(Color.Gray)
+                    .alignSelf(ItemAlign.Start)
+                }
+                .layoutWeight(1)
+                .alignItems(HorizontalAlign.Start)
+
+                Button('连接')
+                  .width(60)
+                  .height(30)
+                  .fontSize(12)
+                  .backgroundColor(this.selectedDevice?.address === device.address ? '#4CAF50' : '#eca94e')
+                  .onClick(() => {
+                    this.selectedDevice = device
+                    this.connectToDevice(device)
+                  })
+              }
+              .width('100%')
+              .padding(10)
+              .backgroundColor(this.selectedDevice?.address === device.address ? '#e8f5e8' : Color.White)
+              .borderRadius(8)
+              .margin({ bottom: 5 })
+            }
+          })
+        }
+        .width('90%')
+        .height(200)
+        .borderRadius(8)
+        .backgroundColor('#f5f5f5')
+      } else if (this.isScanning) {
+        Row() {
+          LoadingProgress()
+            .width(20)
+            .height(20)
+            .color('#eca94e')
+          Text('正在扫描设备...')
+            .fontSize(14)
+            .fontColor(Color.Gray)
+            .margin({ left: 10 })
+        }
+        .justifyContent(FlexAlign.Center)
+        .width('100%')
+        .height(100)
+      } else if (this.scanResults.length > 0 && this.filteredResults.length === 0) {
+        Text(`未找到包含"${this.searchText}"的设备`)
+          .fontSize(14)
+          .fontColor(Color.Gray)
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .height(100)
+      } else {
+        Text('点击"开始扫描"搜索附近的星闪设备')
+          .fontSize(14)
+          .fontColor(Color.Gray)
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .height(100)
+      }
+
+      // 连接状态显示
+      if (this.isConnecting) {
+        Row() {
+          LoadingProgress()
+            .width(20)
+            .height(20)
+            .color('#eca94e')
+          Text('正在连接设备...')
+            .fontSize(14)
+            .fontColor(Color.Gray)
+            .margin({ left: 10 })
+        }
+        .justifyContent(FlexAlign.Center)
+        .width('100%')
+      }
+
+      // 底部按钮
+      Row({ space: 30 }) {
+        Button('取消')
+          .backgroundColor('#eca94e')
+          .onClick(() => {
+            this.stopScan()
+            this.controller.close()
+          })
+
+        Button('关闭')
+          .backgroundColor('#eca94e')
+          .onClick(() => {
+            this.stopScan()
+            this.controller.close()
+          })
+      }
+      .margin({ bottom: 20 })
+    }
+    .width('100%')
+    .padding(20)
+  }
+
+  private filterDevices() {
+    if (!this.searchText.trim()) {
+      this.filteredResults = [...this.scanResults]
+    } else {
+      this.filteredResults = this.scanResults.filter(device => 
+        (device.deviceName || '').toLowerCase().includes(this.searchText.toLowerCase())
+      )
+    }
+  }
+
+  private async startScan() {
+    try {
+      this.isScanning = true
+      this.scanResults = []
+      this.filteredResults = []
+      this.ssapManager.registerCallback(this.scanCallback)
+      await this.ssapManager.startScan()
+      promptAction.showToast({
+        message: '开始扫描设备',
+        duration: 2000
+      })
+    } catch (error) {
+      this.isScanning = false
+      promptAction.showToast({
+        message: '扫描失败: ' + error.message,
+        duration: 2000
+      })
+    }
+  }
+
+  private async stopScan() {
+    try {
+      if (this.isScanning) {
+        await this.ssapManager.stopScan()
+        this.ssapManager.unregisterCallback(this.scanCallback)
+        this.isScanning = false
+        promptAction.showToast({
+          message: '停止扫描',
+          duration: 2000
+        })
+      }
+    } catch (error) {
+      promptAction.showToast({
+        message: '停止扫描失败: ' + error.message,
+        duration: 2000
+      })
+    }
+  }
+
+  private async connectToDevice(device: scan.ScanResults) {
+    try {
+      this.isConnecting = true
+      
+      // 先停止扫描
+      await this.stopScan()
+      
+      // 尝试连接设备
+      this.ssapManager.connectDevice(device.address)
+      
+      // 监听连接状态变化
+      const connectionCallback: ScanResultCallback = {
+        onDeviceFound: () => {},
+        onConnectionStateChanged: (state) => {
+          if (state.state === 0 || 1) { // STATE_CONNECTED
+            this.isConnecting = false
+            promptAction.showToast({
+              message: `已连接到设备: ${device.deviceName || '未知设备'}`,
+              duration: 2000
+            })
+            this.ssapManager.unregisterCallback(connectionCallback)
+            this.controller.close()
+          } else if (state.state === 2 || 4) { // STATE_DISCONNECTED
+            this.isConnecting = false
+            promptAction.showToast({
+              message: '连接失败，设备已断开',
+              duration: 2000
+            })
+            this.ssapManager.unregisterCallback(connectionCallback)
+          }
+        },
+        onPropertyChanged: () => {}
+      }
+      
+      this.ssapManager.registerCallback(connectionCallback)
+      
+      // 设置连接超时
+      setTimeout(() => {
+        if (this.isConnecting) {
+          this.isConnecting = false
+          promptAction.showToast({
+            message: '连接超时，请重试',
+            duration: 2000
+          })
+          this.ssapManager.unregisterCallback(connectionCallback)
+        }
+      }, 10000) // 10秒超时
+      
+    } catch (error) {
+      this.isConnecting = false
+      promptAction.showToast({
+        message: '连接失败: ' + error.message,
+        duration: 2000
+      })
+    }
+  }
+}
+
 @Component
 export struct Setting_Page{
 
@@ -126,8 +424,22 @@ export struct Setting_Page{
     console.log(`保存紧急联系人: ${name} - ${phone}`)
   }
 
+  // 打开星闪链接弹窗
+  private openStarLinkDialog() {
+    this.starLinkDialogController = new CustomDialogController({
+      builder: StarLinkDialog({
+        controller: this.starLinkDialogController!
+      })
+    })
+    this.starLinkDialogController.open()
+  }
+
   dialogController: CustomDialogController = new CustomDialogController({
     builder: EmergencyContactDialog(),
+  })
+
+  starLinkDialogController: CustomDialogController = new CustomDialogController({
+    builder: StarLinkDialog(),
   })
 
   private ssapManager = SsapManager.getInstance();
@@ -216,15 +528,10 @@ export struct Setting_Page{
           })
 
           GridItem() {
-            this.Setting_Card($rawfile('Near_Link.png'), "星闪链接", "  ")
+            this.Setting_Card($rawfile('Near_Link.png'), "星闪链接", "搜索并连接星闪设备")
           }
           .onClick(()=>{
-            // todo 设计弹窗 弹窗内容有搜索框可以输入搜索星闪设备名字（可以为空） 下面出现扫描后出现的设备名字 可以点击选择后链接
-
-            promptAction.showToast({
-              message: '星闪链接.',
-              duration: 2000
-            })
+            this.openStarLinkDialog()
           })
         }
         .columnsTemplate('1fr 1fr 1fr')

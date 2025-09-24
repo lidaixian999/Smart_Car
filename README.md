@@ -3,7 +3,7 @@
 ## 项目概述
 
 FinalCar 是一个基于 HarmonyOS 开发的智能车载控制系统，集成了语音识别、AI 智能对话、车辆控制、天气查询等多种功能。该项目采用 ArkTS 语言开发，提供了完整的车载智能交互体验。
-
+演示视频:https://pan.baidu.com/share/init?surl=qb8LKQoRpX77C627eS1XPw&pwd=jgsg
 ## 技术栈
 
 - **开发语言**: ArkTS (TypeScript)
@@ -303,9 +303,7 @@ UI操作 → GlobalData → SsapManager → NearLink通信 → 车载设备
 
 ## 联系方式
 
-- 项目维护者: 216团队
+- 项目维护者: 216团队——深圳技术大学
 - 邮箱: mingjieli2004@163.com
 
 ---
-
-*最后更新时间: 2024年12月*
