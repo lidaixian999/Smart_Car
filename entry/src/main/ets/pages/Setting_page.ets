@@ -216,11 +216,13 @@ export struct Setting_Page{
           })
 
           GridItem() {
-            this.Setting_Card($rawfile('gas_add.png'), "打开加油口", "  ")
+            this.Setting_Card($rawfile('Near_Link.png'), "星闪链接", "  ")
           }
           .onClick(()=>{
+            // todo 设计弹窗 弹窗内容有搜索框可以输入搜索星闪设备名字（可以为空） 下面出现扫描后出现的设备名字 可以点击选择后链接
+
             promptAction.showToast({
-              message: '加油口已开启.',
+              message: '星闪链接.',
               duration: 2000
             })
           })

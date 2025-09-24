@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "C:/Users/28019/Desktop/0606/216.p12",
-          "storePassword": "0000001BE33346FE974D2F246F50A3BB314F3F22A60CA1C34226114E433BE8C6DA9974B7AFA4A4066A7D0C",
-          "keyAlias": "216",
-          "keyPassword": "0000001B1FAF8115F816D3AF6CA2DA02E3BEC0DDA0848B9645B18B0070890782FFD6BC5F70154C9EE0EC45",
+          "certpath": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_-Pfu2-QADxtgk0bX4PyP_0rdDsECGIRaym-BmxJJgXE=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BC8BAC731C91099532966D3148BE32FD349118A945F74A37EFB1A4B4C649BA15C182757E3AEA704",
+          "profile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_-Pfu2-QADxtgk0bX4PyP_0rdDsECGIRaym-BmxJJgXE=.p7b",
           "signAlg": "SHA256withECDSA",
-          "profile": "C:/Users/28019/Desktop/0606/216Debug (1).p7b",
-          "certpath": "C:/Users/28019/Desktop/0606/216 (2).cer"
+          "storeFile": "C:\\Users\\97049\\.ohos\\config\\default_finalCar_-Pfu2-QADxtgk0bX4PyP_0rdDsECGIRaym-BmxJJgXE=.p12",
+          "storePassword": "0000001B533B8BB03D6C822D859E4F7655CB2199E3A2D6828EFE7677AF5C63D369946756B559D0337D2315"
         }
       }
     ],
@@ -26,7 +26,8 @@
             "caseSensitiveCheck": true,
             "useNormalizedOHMUrl": true
           }
-        }
+        },
+        "targetSdkVersion": "5.0.1(13)"
       }
     ],
     "buildModeSet": [
