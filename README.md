@@ -1,309 +1,316 @@
-# FinalCar 智能车载系统
+# Smart Vehicle System
 
-## 项目概述
+## Project Overview
 
-FinalCar 是一个基于 HarmonyOS 开发的智能车载控制系统，集成了语音识别、AI 智能对话、车辆控制、天气查询等多种功能。该项目采用 ArkTS 语言开发，提供了完整的车载智能交互体验。
-演示视频:https://pan.baidu.com/share/init?surl=qb8LKQoRpX77C627eS1XPw&pwd=jgsg
-## 技术栈
+FinalCar is an intelligent vehicle control system developed based on HarmonyOS, integrating various functions such as voice recognition, AI intelligent dialogue, vehicle control, and weather queries. The project is developed using ArkTS language and provides a complete in-vehicle intelligent interaction experience.
 
-- **开发语言**: ArkTS (TypeScript)
-- **开发框架**: HarmonyOS SDK
-- **UI框架**: ArkUI
-- **语音识别**: HarmonyOS 语音识别服务
-- **网络通信**: HTTP/TCP 协议
-- **近场通信**: NearLink Kit
-- **权限管理**: AbilityKit
+**Demo Video:** https://pan.baidu.com/share/init?surl=qb8LKQoRpX77C627eS1XPw&pwd=jgsg
 
-## 项目架构
+## Tech Stack
 
-### 目录结构
+- **Development Language:** ArkTS (TypeScript)
+- **Development Framework:** HarmonyOS SDK
+- **UI Framework:** ArkUI
+- **Voice Recognition:** HarmonyOS Voice Recognition Service
+- **Network Communication:** HTTP/TCP Protocol
+- **Near Field Communication:** NearLink Kit
+- **Permission Management:** AbilityKit
+
+## Project Architecture
+
+### Directory Structure
+
+text
 
 ```
 finalCar/
 ├── entry/src/main/ets/
-│   ├── entryability/           # 应用入口能力
-│   │   └── EntryAbility.ets    # 主入口类
-│   ├── pages/                  # 页面组件
-│   │   ├── Index.ets          # 主页面
-│   │   ├── Car_page.ets       # 车辆状态页面
-│   │   ├── Aipage.ets         # AI对话页面
-│   │   ├── Setting_page.ets   # 设置页面
-│   │   └── map.ets           # 地图页面
-│   ├── view/                   # 视图组件
-│   │   ├── AutoSet.ets        # 自动设置组件
-│   │   ├── NonePage.ets       # 空页面组件
-│   │   ├── Weather_Page.ets   # 天气页面组件
-│   │   ├── carInformation.ets # 车辆信息组件
-│   │   ├── light_control.ets  # 灯光控制组件
-│   │   └── seat.ets          # 座椅控制组件
-│   ├── model/                  # 数据模型和业务逻辑
-│   │   ├── AICommandParser.ts # AI指令解析器
-│   │   ├── Ai_online.ets      # AI在线服务
-│   │   ├── AsrConstants.ts    # 语音识别常量
-│   │   ├── AudioCapturer.ts   # 音频采集器
-│   │   ├── FileCapturer.ts    # 文件采集器
-│   │   ├── ICapturerInterface.ts # 采集器接口
-│   │   ├── SmartCommandExecutor.ets # 智能指令执行器
-│   │   ├── SsapManager.ets    # SSAP管理器
-│   │   ├── Tcp.ets           # TCP通信
-│   │   ├── Tcp_data.ets      # TCP数据管理
-│   │   ├── Util.ts           # 工具类
-│   │   └── Weather.ets       # 天气服务
-│   └── viewmodel/             # 视图模型
-│       └── Auto_item.ets     # 自动化项目模型
-└── AppScope/                   # 应用配置
-    ├── app.json5             # 应用配置文件
-    └── resources/            # 应用资源
+│   ├── entryability/           # Application Entry Capability
+│   │   └── EntryAbility.ets    # Main Entry Class
+│   ├── pages/                  # Page Components
+│   │   ├── Index.ets          # Main Page
+│   │   ├── Car_page.ets       # Vehicle Status Page
+│   │   ├── Aipage.ets         # AI Dialogue Page
+│   │   ├── Setting_page.ets   # Settings Page
+│   │   └── map.ets           # Map Page
+│   ├── view/                   # View Components
+│   │   ├── AutoSet.ets        # Auto Settings Component
+│   │   ├── NonePage.ets       # Empty Page Component
+│   │   ├── Weather_Page.ets   # Weather Page Component
+│   │   ├── carInformation.ets # Vehicle Information Component
+│   │   ├── light_control.ets  # Light Control Component
+│   │   └── seat.ets          # Seat Control Component
+│   ├── model/                  # Data Models & Business Logic
+│   │   ├── AICommandParser.ts # AI Command Parser
+│   │   ├── Ai_online.ets      # AI Online Service
+│   │   ├── AsrConstants.ts    # Voice Recognition Constants
+│   │   ├── AudioCapturer.ts   # Audio Capturer
+│   │   ├── FileCapturer.ts    # File Capturer
+│   │   ├── ICapturerInterface.ts # Capturer Interface
+│   │   ├── SmartCommandExecutor.ets # Smart Command Executor
+│   │   ├── SsapManager.ets    # SSAP Manager
+│   │   ├── Tcp.ets           # TCP Communication
+│   │   ├── Tcp_data.ets      # TCP Data Management
+│   │   ├── Util.ts           # Utility Class
+│   │   └── Weather.ets       # Weather Service
+│   └── viewmodel/             # View Models
+│       └── Auto_item.ets     # Automation Item Model
+└── AppScope/                   # Application Configuration
+    ├── app.json5             # Application Configuration File
+    └── resources/            # Application Resources
 ```
 
-### 核心架构设计
+### Core Architecture Design
 
-#### 1. 分层架构
+#### 1. Layered Architecture
 
-- **表示层 (Presentation Layer)**: 页面组件和视图组件
-- **业务逻辑层 (Business Logic Layer)**: 模型层的各种服务和管理器
-- **数据访问层 (Data Access Layer)**: TCP通信、文件操作等
+- **Presentation Layer:** Page components and view components
+- **Business Logic Layer:** Various services and managers in the model layer
+- **Data Access Layer:** TCP communication, file operations, etc.
 
-#### 2. 设计模式
+#### 2. Design Patterns
 
-- **单例模式**: `SsapManager`、`GlobalData`、`AICommandParser` 等核心服务
-- **策略模式**: `ICapturerInterface` 接口的不同实现
-- **观察者模式**: 语音识别状态变化通知
-- **命令模式**: AI指令解析和执行
+- **Singleton Pattern:** Core services like SsapManager, GlobalData, AICommandParser
+- **Strategy Pattern:** Different implementations of ICapturerInterface
+- **Observer Pattern:** Voice recognition state change notifications
+- **Command Pattern:** AI command parsing and execution
 
-## 核心功能模块
+## Core Functional Modules
 
-### 1. 语音识别模块
+### 1. Voice Recognition Module
 
-**文件**: `AudioCapturer.ts`, `AsrConstants.ts`
+**Files:** AudioCapturer.ts, AsrConstants.ts
 
-**功能**:
-- 实时音频采集 (16kHz, 单声道, 16位PCM)
-- 语音识别状态管理
-- 音频数据流处理
+**Features:**
 
-**关键特性**:
-- 支持实时语音识别
-- 音频质量优化
-- 错误处理和重试机制
+- Real-time audio capture (16kHz, mono, 16-bit PCM)
+- Voice recognition state management
+- Audio data stream processing
 
-### 2. AI智能对话模块
+**Key Characteristics:**
 
-**文件**: `Ai_online.ets`, `AICommandParser.ts`, `SmartCommandExecutor.ets`
+- Supports real-time voice recognition
+- Audio quality optimization
+- Error handling and retry mechanisms
 
-**这里注意api_key为项目团队额度，自己部署时可能用完，需要自己部署，**
+### 2. AI Intelligent Dialogue Module
 
-**本项目用的大模型为星火X1，可以申请免费额度**
+**Files:** Ai_online.ets, AICommandParser.ts, SmartCommandExecutor.ets
 
-**功能**:
-- AI对话接口集成
-- 智能指令解析
-- 车辆控制指令执行
+**Note:** The API key has limited quota for the project team. You may need to deploy your own instance when the quota is exhausted. This project uses the Spark X1 large language model, which offers free quota for application.
 
-**支持的指令类型**:
-- 车灯控制: `[HEADLIGHT_ON]`, `[HEADLIGHT_OFF]`
-- 座椅通风: `[SEAT_VENT_ON]`, `[SEAT_VENT_OFF]`
-- 氛围灯控制: `[AMBIENT_OFF]`, `[AMBIENT_MIX]`, `[AMBIENT_RED]` 等
-- 座椅模式: `[SEAT_NORMAL]`, `[SEAT_COMFORT]`, `[SEAT_SPORT]`
+**Features:**
 
-### 3. 车辆控制模块
+- AI dialogue interface integration
+- Intelligent command parsing
+- Vehicle control command execution
 
-**文件**: `SsapManager.ets`, `Tcp_data.ets`
+**Supported Command Types:**
 
-**功能**:
-- 近场设备扫描和连接
-- 车辆状态数据传输
-- 实时控制指令发送
+- Headlight control: [HEADLIGHT_ON], [HEADLIGHT_OFF]
+- Seat ventilation: [SEAT_VENT_ON], [SEAT_VENT_OFF]
+- Ambient light control: [AMBIENT_OFF], [AMBIENT_MIX], [AMBIENT_RED], etc.
+- Seat modes: [SEAT_NORMAL], [SEAT_COMFORT], [SEAT_SPORT]
 
-**技术实现**:
-- 使用 NearLink Kit 进行设备通信
-- TCP协议数据传输
-- 4位数字指令编码系统
+### 3. Vehicle Control Module
 
-### 4. 天气服务模块
+**Files:** SsapManager.ets, Tcp_data.ets
 
-**文件**: `Weather.ets`, `Weather_Page.ets`
+**Features:**
 
-**功能**:
-- 实时天气数据获取
-- 天气信息展示
-- 地理位置服务集成
+- Near-field device scanning and connection
+- Vehicle status data transmission
+- Real-time control command sending
 
-### 5. 用户界面模块
+**Technical Implementation:**
 
-**文件**: 各页面和视图组件
+- Uses NearLink Kit for device communication
+- TCP protocol data transmission
+- 4-digit command encoding system
 
-**功能**:
-- 响应式UI设计
-- 导航管理
-- 状态同步显示
+### 4. Weather Service Module
 
-## 数据流架构
+**Files:** Weather.ets, Weather_Page.ets
 
-### 语音控制流程
+**Features:**
 
-```
-用户语音输入 → AudioCapturer → 语音识别服务 → AI解析 → 指令执行 → 车辆控制
-```
+- Real-time weather data acquisition
+- Weather information display
+- Geographic location service integration
 
-### 数据传输流程
+### 5. User Interface Module
 
-```
-UI操作 → GlobalData → SsapManager → NearLink通信 → 车载设备
-```
+**Files:** Various page and view components
 
-## 权限配置
+**Features:**
 
-项目需要以下系统权限:
+- Responsive UI design
+- Navigation management
+- Status synchronization display
 
-- `ohos.permission.MICROPHONE`: 麦克风访问权限
-- `ohos.permission.ACCESS_NEARLINK`: 近场通信权限
-- `ohos.permission.LOCATION`: 位置服务权限
-- `ohos.permission.APPROXIMATELY_LOCATION`: 大概位置权限
+## Data Flow Architecture
 
-## 开发环境配置
+### Voice Control Flow
 
-### 环境要求
+User Voice Input → AudioCapturer → Voice Recognition Service → AI Parsing → Command Execution → Vehicle Control
 
-- **DevEco Studio**: 最新版本
-- **HarmonyOS SDK**: API 13 或更高版本
-- **Node.js**: 16.x 或更高版本
+### Data Transmission Flow
 
-### 构建配置
+UI Operation → GlobalData → SsapManager → NearLink Communication → Vehicle Device
 
-项目使用 Hvigor 构建系统，主要配置文件:
+## Permission Configuration
 
-- `build-profile.json5`: 构建配置
-- `oh-package.json5`: 依赖管理
-- `hvigorfile.ts`: 构建脚本
+The project requires the following system permissions:
 
-**这里注意迁移使用时要修改对应配置**
+- `ohos.permission.MICROPHONE`: Microphone access permission
+- `ohos.permission.ACCESS_NEARLINK`: Near-field communication permission
+- `ohos.permission.LOCATION`: Location service permission
+- `ohos.permission.APPROXIMATELY_LOCATION`: Approximate location permission
 
-## 部署说明
+## Development Environment Configuration
 
-### 开发环境部署
+### Environment Requirements
 
-1. 克隆项目到本地
-2. 使用 DevEco Studio 打开项目
-3. 配置签名证书（若使用星闪则需要手动签名）
-4. 连接 HarmonyOS 设备或模拟器
-5. 运行项目
+- **DevEco Studio:** Latest version
+- **HarmonyOS SDK:** API 13 or higher
+- **Node.js:** 16.x or higher
 
-### 生产环境部署
+### Build Configuration
 
-1. 配置生产环境签名
-2. 构建 HAP 包
-3. 通过应用市场或企业分发渠道部署
+The project uses Hvigor build system, main configuration files:
 
-## 性能优化
+- `build-profile.json5`: Build configuration
+- `oh-package.json5`: Dependency management
+- `hvigorfile.ts`: Build scripts
 
-### 内存管理
+**Note:** Remember to modify corresponding configurations when migrating for your own use.
 
-- 使用单例模式减少对象创建
-- 及时释放音频资源
-- 优化大数据对象的生命周期
+## Deployment Instructions
 
-### 网络优化
+### Development Environment Deployment
 
-- 实现请求缓存机制
-- 优化 AI 接口调用频率
-- 使用连接池管理 TCP 连接
+1. Clone the project locally
+2. Open the project with DevEco Studio
+3. Configure signature certificate (manual signature required if using Spark)
+4. Connect HarmonyOS device or emulator
+5. Run the project
 
-### UI 性能
+### Production Environment Deployment
 
-- 使用懒加载优化页面渲染
-- 实现虚拟滚动优化长列表
-- 优化动画性能
+1. Configure production environment signature
+2. Build HAP package
+3. Deploy through app market or enterprise distribution channels
 
-## 安全考虑
+## Performance Optimization
 
-### 数据安全
+### Memory Management
 
-- 语音数据本地处理，不存储敏感信息
-- API 密钥安全存储
-- 网络传输数据加密
+- Use singleton pattern to reduce object creation
+- Release audio resources promptly
+- Optimize lifecycle of large data objects
 
-### 权限安全
+### Network Optimization
 
-- 最小权限原则
-- 运行时权限检查
-- 用户隐私保护
+- Implement request caching mechanism
+- Optimize AI interface call frequency
+- Use connection pool for TCP connection management
 
-## 测试策略
+### UI Performance
 
-### 单元测试
+- Use lazy loading to optimize page rendering
+- Implement virtual scrolling for long lists
+- Optimize animation performance
 
-- 核心业务逻辑测试
-- 数据模型验证
-- 工具类函数测试
+## Security Considerations
 
-### 集成测试
+### Data Security
 
-- 语音识别流程测试
-- AI 对话集成测试
-- 设备通信测试
+- Local processing of voice data, no sensitive information storage
+- Secure storage of API keys
+- Encrypted network data transmission
 
-### 用户体验测试
+### Permission Security
 
-- 语音识别准确率测试
-- 响应时间测试
-- 界面交互测试
+- Principle of least privilege
+- Runtime permission checking
+- User privacy protection
 
-## 维护和扩展
+## Testing Strategy
 
-### 代码维护
+### Unit Testing
 
-- 遵循 TypeScript 编码规范
-- 定期代码审查
-- 文档同步更新
+- Core business logic testing
+- Data model validation
+- Utility function testing
 
-### 功能扩展
+### Integration Testing
 
-- 模块化设计支持功能扩展
-- 插件化架构预留扩展点
-- API 版本兼容性管理
+- Voice recognition process testing
+- AI dialogue integration testing
+- Device communication testing
 
-## 故障排除
+### User Experience Testing
 
-### 常见问题
+- Voice recognition accuracy testing
+- Response time testing
+- Interface interaction testing
 
-1. **语音识别失败**
-   - 检查麦克风权限
-   - 验证网络连接
-   - 确认语音识别服务状态
+## Maintenance and Extension
 
-2. **设备连接失败**
-   - 检查 NearLink 权限
-   - 验证设备地址配置
-   - 确认设备在通信范围内
+### Code Maintenance
 
-3. **AI 响应异常**
-   - 检查 API 密钥配置
-   - 验证网络连接状态
-   - 查看错误日志信息
+- Follow TypeScript coding standards
+- Regular code reviews
+- Synchronized documentation updates
 
-## 版本历史
+### Feature Extension
 
-- **v1.0.0**: 初始版本，基础功能实现
-- **v1.1.0**: 优化语音识别准确率
-- **v1.2.0**: 增加天气服务功能
-- **v1.3.0**: 完善车辆控制指令
+- Modular design supports feature extension
+- Plugin architecture with extension points reserved
+- API version compatibility management
 
-## 贡献指南
+## Troubleshooting
 
-1. Fork 项目
-2. 创建功能分支
-3. 提交代码变更
-4. 创建 Pull Request
-5. 代码审查和合并
+### Common Issues
 
-## 许可证
+**Voice Recognition Failure**
 
-本项目采用 MIT 许可证，详见 LICENSE 文件。
+- Check microphone permissions
+- Verify network connection
+- Confirm voice recognition service status
 
-## 联系方式
+**Device Connection Failure**
 
-- 项目维护者: 216团队——深圳技术大学
-- 邮箱: mingjieli2004@163.com
+- Check NearLink permissions
+- Verify device address configuration
+- Confirm device is within communication range
 
----
+**AI Response Abnormalities**
+
+- Check API key configuration
+- Verify network connection status
+- Check error log information
+
+## Version History
+
+- **v1.0.0:** Initial version, basic functionality implementation
+- **v1.1.0:** Optimized voice recognition accuracy
+- **v1.2.0:** Added weather service functionality
+- **v1.3.0:** Improved vehicle control commands
+
+## Contributing Guide
+
+1. Fork the project
+2. Create a feature branch
+3. Submit code changes
+4. Create a Pull Request
+5. Code review and merge
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Contact
+
+- **Project Maintainer:** Team 216 - Shenzhen Technology University
+- **Email:** [mingjieli2004@163.com](https://mailto:mingjieli2004@163.com/)
