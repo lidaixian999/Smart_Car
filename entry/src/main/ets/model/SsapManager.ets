@@ -520,29 +520,6 @@ export class SsapManager {
     });
   }
 
-  /**
-   * 关闭客户端连接
-   */
-  public closeClient(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (!this.client) {
-        const errorMsg = 'Client not initialized';
-        hilog.error(this.domainId, this.logTag, errorMsg);
-        reject(new Error(errorMsg));
-        return;
-      }
-
-      hilog.info(this.domainId, this.logTag, 'Closing client...');
-      try {
-        this.client.close()
-      } catch (err) {
-        const error = err as BusinessError;
-        const errorMsg = `Close client error - Code: ${error.code}, Message: ${error.message}`;
-        hilog.error(this.domainId, this.logTag, errorMsg);
-        reject(new Error(errorMsg));
-      }
-    });
-  }
 
   /**
    * 获取连接状态

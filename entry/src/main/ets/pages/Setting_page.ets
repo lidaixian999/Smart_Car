@@ -111,7 +111,7 @@ struct StarLinkDialog {
     builder: StarLinkDialog({}),
   })
 
-  @State searchText: string = ''
+  @State searchText: string = 'cockpit'
   @State isScanning: boolean = false
   @State scanResults: Array<scan.ScanResults> = []
   @State filteredResults: Array<scan.ScanResults> = []
@@ -147,7 +147,7 @@ struct StarLinkDialog {
 
       // 搜索框
       Row({ space: 10 }) {
-        TextInput({ placeholder: '输入设备名称（可选）' })
+        TextInput({ placeholder: '输入设备名称（可选）', text: this.searchText })
           .width('60%')
           .height(40)
           .onChange((value: string) => {
@@ -311,7 +311,16 @@ struct StarLinkDialog {
       this.scanResults = []
       this.filteredResults = []
       this.ssapManager.registerCallback(this.scanCallback)
-      await this.ssapManager.startScan()
+      
+      // 如果输入了设备名称，将其作为扫描过滤条件
+      let scanFilter: scan.ScanFilters | undefined = undefined
+      if (this.searchText.trim()) {
+        scanFilter = {
+          deviceName: this.searchText.trim()
+        }
+      }
+      
+      await this.ssapManager.startScan(scanFilter)
       promptAction.showToast({
         message: '开始扫描设备',
         duration: 2000
